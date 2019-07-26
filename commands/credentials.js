@@ -36,7 +36,7 @@ const buildAxiosWithEnvAndAuth = function(appkit, environment) {
   });
 };
 
-async function create_core_auth_credentials(appkit, args) {
+async function create_core_auth_client(appkit, args) {
   const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
   try {
     await authAxios.post(
@@ -50,7 +50,7 @@ async function create_core_auth_credentials(appkit, args) {
     appkit.terminal.markdown(
       `~~Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}~~`
     );
-    appkit.terminal.task(`Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}`)
+    appkit.terminal.task(`Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space} "ok"`)
   } catch (err) {
     appkit.terminal.error(
       'An error occured while attempting to create a Core-Auth OAuth Client:\n',
@@ -111,7 +111,7 @@ module.exports = {
         type,
         environment
       },
-      create_core_auth_credentials.bind(null, appkit)
+      create_core_auth_client.bind(null, appkit)
     );
   },
   update() {
