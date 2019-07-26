@@ -47,13 +47,14 @@ async function create_core_auth_credentials(appkit, args) {
         type: args.type
       }
     );
-    console.log(
-      `Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}`
+    appkit.terminal.markdown(
+      `~~Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}~~`
     );
+    appkit.terminal.task(`Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}`)
   } catch (err) {
-    console.log(
+    appkit.terminal.error(
       'An error occured while attempting to create a Core-Auth OAuth Client:\n',
-      err
+      err.response.data.error ? err.response.data.error : err.Error
     );
   }
 }
@@ -100,7 +101,7 @@ module.exports = {
       };
 
     appkit.args.command(
-      'core:auth:credentials:create',
+      'core:auth:client:create',
       'Create client credentials and assign them to the specified app',
       {
         app,
