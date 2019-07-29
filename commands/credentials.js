@@ -47,14 +47,12 @@ async function create_core_auth_client(appkit, args) {
         type: args.type
       }
     );
-    appkit.terminal.markdown(
-      `~~Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}~~`
+    appkit.terminal.print(null,
+      `Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}`
     );
-    appkit.terminal.task(`Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space} "ok"`)
   } catch (err) {
-    appkit.terminal.error(
-      'An error occured while attempting to create a Core-Auth OAuth Client:\n',
-      err.response.data.error ? err.response.data.error : err.Error
+    appkit.terminal.print(err.response.data.error ? err.response.data.error : err,
+      'An error occured while attempting to create a Core-Auth OAuth Client\n'
     );
   }
 }
