@@ -1,17 +1,17 @@
 # Core | cli-core-auth-plugin
 
-Add a Core Auth OAuth Client Access to your Akkeris App by using this plugin.
+Use this Akkeris CLI plugin to create a Core Auth OAuth Client and add it's credentials to your Akkeris App by using this plugin.
 
-Creates a new Core-Auth OAuth Client and adds the following as config VARs to your app:
-
-```json
-{
-  "CORE_AUTH_CLIENT_ID": "client_id",
-  "CORE_AUTH_CLIENT_SECRET": "client_secret",
-  "CORE_AUTH_REDIRECT_URIS": "redirect_uris",
-  "CORE_AUTH_RETURNTO_URIS": "returnto_uris"
-}
-```
+> Creates a new Core-Auth OAuth Client and adds the following as config VARs to your app:
+>
+> ```json
+> {
+>   "CORE_AUTH_CLIENT_ID": "client_id",
+>   "CORE_AUTH_CLIENT_SECRET": "client_secret",
+>   "CORE_AUTH_REDIRECT_URIS": "redirect_uris",
+>   "CORE_AUTH_RETURNTO_URIS": "returnto_uris"
+> }
+> ```
 
 ## Github
 
