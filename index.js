@@ -17,7 +17,7 @@ module.exports = {
     // pulled, so its a "post" update operation.
   },
   'group': 'core',
-  'help': 'Manage your app\'s Core-Auth OAuth Client Credentials',
+  'help': 'Manage your App\'s Core Auth OAuth Client Credentials',
   'primary': false
 } 
 

@@ -37,8 +37,11 @@ const buildAxiosWithEnvAndAuth = function(appkit, environment) {
 };
 
 async function create_core_auth_client(appkit, args) {
-  const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
+  let task = appkit.terminal.task(`Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`);
+  task.start();
+
   try {
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
     await authAxios.post(
       `/credentials/addssotoapplication/${args.app}/${args.space}`,
       {
@@ -47,10 +50,10 @@ async function create_core_auth_client(appkit, args) {
         type: args.type
       }
     );
-    appkit.terminal.print(null,
-      `Successfully added Core-Auth OAuth Client Credentials to ${args.app} in ${args.space}`
-    );
+
+    task.end('ok');
   } catch (err) {
+    task.end('error');
     appkit.terminal.print(err.response.data.error ? err.response.data.error : err,
       'An error occured while attempting to create a Core-Auth OAuth Client\n'
     );
@@ -116,6 +119,6 @@ module.exports = {
     // do nothing.
   },
   group: 'core',
-  help: 'Manage your app\'s Core-Auth OAuth Client Credentials',
+  help: 'Manage your Akkeris App\'s Core Auth OAuth Client Credentials',
   primary: true
 };
