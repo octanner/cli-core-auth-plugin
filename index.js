@@ -16,7 +16,7 @@ module.exports = {
     // this is executed AFTER the plugin has had the latest set of code
     // pulled, so its a "post" update operation.
   },
-  'group': 'core',
+  'group': 'coreauth',
   'help': 'Manage your App\'s Core Auth OAuth Client Credentials',
   'primary': false
 } 

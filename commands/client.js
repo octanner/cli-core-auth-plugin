@@ -118,7 +118,7 @@ module.exports = {
   update() {
     // do nothing.
   },
-  group: 'core',
+  group: 'coreauth',
   help: 'Manage your Akkeris App\'s Core Auth OAuth Client Credentials',
   primary: true
 };
