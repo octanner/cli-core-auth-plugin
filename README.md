@@ -37,7 +37,7 @@ aka plugins:install git@github.com:octanner/cli-core-auth-plugin.git
 
 ```zsh
 # Stage
-ak core:auth:credentials:create -a app -s space-stg -e stg -r http://localhost:3000/auth/callback -r https://app-stg.octanner.io/auth/callback -l http://localhost:3000/auth/login -r https://app-stg.octanner.io/auth/login
+ak core:auth:credentials:create -a app -s space-stg -e stg -r http://localhost:3000/auth/callback -r https://app-stg.octanner.io/auth/callback -l http://localhost:3000/auth/login -l https://app-stg.octanner.io/auth/login
 
 # Production
 ak core:auth:credentials:create -a app -s space-prd -e prd -r https://app.octanner.io/auth/callback -l https://app.octanner.io/auth/login
