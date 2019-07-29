@@ -1,3 +1,10 @@
+1.0.1 / 2019-07-29
+==================
+
+* Updated messaging to be a task
+* Updated help text
+* Renamed `credentials.js` -> `client.js`
+
 1.0.0 / 2019-07-29
 ==================
 
