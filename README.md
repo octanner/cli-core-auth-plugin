@@ -83,14 +83,14 @@ ak core:auth:credentials:create
 Manage your app\'s Core-Auth OAuth Client Credentials
 
 Options:
-  --version             Show version number                                                                            [boolean]
-  --help                Show help                                                                                      [boolean]
-  --app, -a             An existing app that needs core auth credentials                                               [string] [required]
-  --space, -s           Space to which the app belongs to                                                              [string]
-  --redirect_uris, -r   Redirect URIs, URLs that the user will be redirected to upon authenticating                    [string]
-  --returnto_uris, -l   Post logout redirect URIs, URLs that the client can redirect a user to after logging out       [string]
-  --type, -t            [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                       [string]
-  --environment, -e     [qa|stg|prd] describes which Core Auth environment the credentials will be created             [string]
+  --version               Show version number                                                                            [boolean]
+  --help                  Show help                                                                                      [boolean]
+  --app, -a               An existing app that needs core auth credentials                                               [string] [required]
+  --space, -s             Space to which the app belongs to                                                              [string] [required]
+  --post_login_url, -r    Redirect URIs, URLs that the user will be redirected to upon authenticating                    [string]
+  --post_logout_url, -l   Post logout redirect URIs, URLs that the client can redirect a user to after logging out       [string]
+  --type, -t              [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                       [string]
+  --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created             [string]
 ```
 
 ## FUTURE TODOS

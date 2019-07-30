@@ -45,8 +45,8 @@ async function create_core_auth_client(appkit, args) {
     await authAxios.post(
       `/credentials/addssotoapplication/${args.app}/${args.space}`,
       {
-        redirect_uris: args.redirect_uris,
-        returnto_uris: args.returnto_uris,
+        redirect_uris: args.post_login_url,
+        returnto_uris: args.post_logout_url,
         type: args.type
       }
     );
@@ -73,14 +73,14 @@ module.exports = {
         string: true,
         description: 'The space which the app belongs to'
       },
-      redirect_uris = {
+      post_login_url = {
         alias: 'r',
         string: true,
         demand: false,
         description:
           'Redirect URIs for client apps with a UI only. Service apps do not need redirect URIs as they will not be using user authentication'
       },
-      returnto_uris = {
+      post_logout_url = {
         alias: 'l',
         string: true,
         demand: false,
@@ -107,8 +107,8 @@ module.exports = {
       {
         app,
         space,
-        redirect_uris,
-        returnto_uris,
+        post_login_url,
+        post_logout_url,
         type,
         environment
       },
