@@ -6,10 +6,10 @@ Use this Akkeris CLI plugin to create a Core Auth OAuth Client and add it's cred
 >
 > ```json
 > {
->   "CORE_AUTH_CLIENT_ID": "client_id",
->   "CORE_AUTH_CLIENT_SECRET": "client_secret",
->   "CORE_AUTH_REDIRECT_URIS": "redirect_uris",
->   "CORE_AUTH_RETURNTO_URIS": "returnto_uris"
+>   "CORE_AUTH_CLIENT_ID": "clientId",
+>   "CORE_AUTH_CLIENT_SECRET": "clientSecret",
+>   "CORE_AUTH_POST_LOGIN_URLS": "[\"redirectUris\"]",
+>   "CORE_AUTH_POST_LOGOUT_URLS": "[\"returntoUris\"]"
 > }
 > ```
 
@@ -58,7 +58,10 @@ ak core:auth:credentials:create -a app -s space-prd -e prd -r https://app.octann
 
 ```zsh
 # Stage
-ak core:auth:credentials:create -a app -s space-stg -e stg
+ak core:auth:credentials:create \
+-a app \
+-s space-stg \
+-e stg
 
 # Production
 ak core:auth:credentials:create -a app -s space-prd -e prd
@@ -68,7 +71,12 @@ ak core:auth:credentials:create -a app -s space-prd -e prd
 
 ```zsh
 # Stage
-ak core:auth:credentials:create -a app -s space-stg -e stg -r oct-auth://mobile-app/callback -l oct-auth://mobile-app/logout
+ak core:auth:credentials:create \
+-a app \
+-s space-stg \
+-e stg \
+-r oct-auth://mobile-app/callback \
+-l oct-auth://mobile-app/logout
 
 # Production
 ak core:auth:credentials:create -a app -s space-prd -e prd -r oct-auth://mobile-app/callback -l oct-auth://mobile-app/logout
@@ -83,14 +91,14 @@ ak core:auth:credentials:create
 Manage your app\'s Core-Auth OAuth Client Credentials
 
 Options:
-  --version               Show version number                                                                            [boolean]
-  --help                  Show help                                                                                      [boolean]
-  --app, -a               An existing app that needs core auth credentials                                               [string] [required]
-  --space, -s             Space to which the app belongs to                                                              [string] [required]
-  --post_login_url, -r    Redirect URIs, URLs that the user will be redirected to upon authenticating                    [string]
-  --post_logout_url, -l   Post logout redirect URIs, URLs that the client can redirect a user to after logging out       [string]
-  --type, -t              [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                       [string]
-  --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created             [string]
+  --version               Show version number                                                                                                         [boolean]
+  --help                  Show help                                                                                                                   [boolean]
+  --app, -a               An existing app that needs core auth credentials                                                                            [string] [required]
+  --space, -s             Space to which the app belongs to. Production requires "https" URLs                                                         [string] [required]
+  --post_login_url, -r    URL that your app will be listening on for an "authorization_code" once a user authenticates. Can be passed multiple times  [string]
+  --post_logout_url, -l   URL that the client can redirect a user to upon logging out of sessions. Can be passed multiple times                       [string]
+  --type, -t              [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                                                    [string]
+  --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created                                          [string]
 ```
 
 ## FUTURE TODOS

@@ -71,21 +71,21 @@ module.exports = {
       space = {
         alias: 's',
         string: true,
-        description: 'The space which the app belongs to'
+        description: 'The space which the app belongs to. Production requires "https" URLs'
       },
       post_login_url = {
         alias: 'r',
         string: true,
         demand: false,
         description:
-          'Redirect URIs for client apps with a UI only. Service apps do not need redirect URIs as they will not be using user authentication'
+          'URL that your app will be listening on for an "authorization_code" once a user authenticates. Can be passed multiple times'
       },
       post_logout_url = {
         alias: 'l',
         string: true,
         demand: false,
         description:
-          'Post logout redirect URIs, URLs that the client can redirect a user to after logging out'
+          'URL that the client can redirect a user to upon logging out of sessions. Can be passed multiple times'
       },
       type = {
         alias: 't',

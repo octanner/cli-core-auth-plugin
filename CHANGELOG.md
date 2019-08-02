@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 / 2019-07-30
+
+- Updated Readme Examples
+- Updated plugin help
+
 ## 1.1.0 / 2019-07-30
 
 - Changed `redirect_uris` -> `post_login_url`
