@@ -31,6 +31,14 @@ or via SSH:
 aka plugins:install git@github.com:octanner/cli-core-auth-plugin.git
 ```
 
+## Developing
+
+To edit the group, name, or other details, edit `plugin.js`.
+
+To edit the existing commands or add to them, edit the respective command in `/commands`.
+
+Run `npm run build` and commit changes before running `npm version`.
+
 ## Usage
 
 ### Web Client

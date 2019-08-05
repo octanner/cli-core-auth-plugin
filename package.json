@@ -13,7 +13,6 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "preversion": "npm run build",
     "build": "ncc build plugin.js -o dist"
   },
   "dependencies": {

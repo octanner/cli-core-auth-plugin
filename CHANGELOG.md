@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3 / 2019-08-05
+
+- Use symbolic link for `index.js` -> `dist/index.js`
+- Update Scripts, removed `preversion`
+
 ## 1.1.2 / 2019-08-05
 
 - Using `ncc` for single file build
