@@ -4,6 +4,7 @@
 
 - Use symbolic link for `index.js` -> `dist/index.js`
 - Update Scripts, removed `preversion`
+- Update error handling
 
 ## 1.1.2 / 2019-08-05
 

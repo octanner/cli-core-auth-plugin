@@ -54,7 +54,7 @@ async function create_core_auth_client(appkit, args) {
     task.end('ok');
   } catch (err) {
     task.end('error');
-    appkit.terminal.print(err.response.data.error ? err.response.data.error : err,
+    appkit.terminal.print(err.response && err.response.data.error ? err.response.data.error : err,
       'An error occured while attempting to create a Core-Auth OAuth Client\n'
     );
   }
