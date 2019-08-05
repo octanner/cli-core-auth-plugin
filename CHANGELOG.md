@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 / 2019-08-05
+
+- Using `ncc` for single file build
+
 ## 1.1.1 / 2019-07-30
 
 - Updated Readme Examples
