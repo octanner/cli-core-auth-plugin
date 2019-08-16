@@ -112,6 +112,6 @@ Options:
 ## FUTURE TODOS
 
 - [x] `ak core:auth:client:create`
-- [ ] `ak core:auth:client:update`
-- [ ] `ak core:auth:client:remove`
-- [ ] `ak core:auth:client:regeneratesecret`
+- [x] `ak core:auth:client:update`
+- [x] `ak core:auth:client:remove`
+- [x] `ak core:auth:client:regeneratesecret`
