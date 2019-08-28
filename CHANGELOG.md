@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 / 2019-08-16
+
+- Added more Client commands to assist in maintaining client credentials:
+  - `remove`
+  - `update`
+  - `regenerate`
+
 ## 1.1.3 / 2019-08-05
 
 - Use symbolic link for `index.js` -> `dist/index.js`
