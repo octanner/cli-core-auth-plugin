@@ -2,25 +2,25 @@
 
 const createClient = require('./client/create')
 const updateClient = require('./client/update')
-const args = require('../utils/shared-arguments')
+const sharedArgs = require('../utils/shared-arguments')
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args
       .command(
         'core:auth:client:create',
         'Create client credentials and assign them to the specified app',
-        args,
+        sharedArgs,
         createClient.bind(null, appkit)
       )
       .command(
         'core:auth:client:update',
         'Update client credentials and config for the specified app',
-        args,
+        sharedArgs,
         updateClient.bind(null, appkit)
       )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',

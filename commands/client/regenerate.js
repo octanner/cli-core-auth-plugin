@@ -1,7 +1,7 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
-const args = require('../../utils/shared-arguments')
+const sharedArgs = require('../../utils/shared-arguments')
 
-async function regenerateClient (appkit, args) {
+async function regenerateClient(appkit, args) {
   let task = appkit.terminal.task(
     `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
   )
@@ -35,19 +35,19 @@ async function regenerateClient (appkit, args) {
 }
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args.command(
       'core:auth:client:regeneratesecret',
       'Regenerate your client_secret and update config for the specified app',
       {
-        app: args.app,
-        space: args.space,
-        environment: args.environment
+        app: sharedArgs.app,
+        space: sharedArgs.space,
+        environment: sharedArgs.environment
       },
       regenerateClient.bind(null, appkit)
     )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',

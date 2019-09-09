@@ -1,9 +1,9 @@
 'use strict'
 
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
-const args = require('../../utils/shared-arguments')
+const sharedArgs = require('../../utils/shared-arguments')
 
-async function removeClient (appkit, args) {
+async function removeClient(appkit, args) {
   let task = appkit.terminal.task(
     `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
   )
@@ -35,19 +35,18 @@ async function removeClient (appkit, args) {
 }
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args.command(
       'core:auth:client:remove',
       'Removes your client credentials from the config for the specified app',
       {
-        app: args.app,
-        space: args.space,
-        environment: args.environment
+        app: sharedArgs.app,
+        space: sharedArgs.space
       },
       removeClient.bind(null, appkit)
     )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',
