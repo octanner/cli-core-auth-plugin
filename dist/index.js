@@ -3014,7 +3014,8 @@ module.exports = {
       'Removes your client credentials from the config for the specified app',
       {
         app: sharedArgs.app,
-        space: sharedArgs.space
+        space: sharedArgs.space,
+        environment: sharedArgs.environment
       },
       removeClient.bind(null, appkit)
     )
