@@ -43,6 +43,69 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
+/***/ 17:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const buildAxiosWithEnvAndAuth = __webpack_require__(489)
+const sharedArgs = __webpack_require__(354)
+
+async function regenerateClient(appkit, args) {
+  let task = appkit.terminal.task(
+    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
+  )
+  task.start()
+
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space =
+    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const environment =
+    typeof args.environment === 'string'
+      ? args.environment.toLowerCase()
+      : args.environment
+
+  try {
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+    await authAxios.post('/coreauth/client/regenerate', {
+      app: app,
+      ...(space ? { space: space } : {}),
+      redirect_uris: args.post_login_url,
+      returnto_uris: args.post_logout_url
+    })
+
+    task.end('ok')
+  } catch (err) {
+    task.end('error')
+    appkit.terminal.print(
+      err.response && err.response.data.error ? err.response.data.error : err,
+      'An error occured while attempting to regenerate the Core-Auth OAuth Client Secret\n'
+    )
+  }
+}
+
+module.exports = {
+  init(appkit) {
+    appkit.args.command(
+      'core:auth:client:regeneratesecret',
+      'Regenerate your client_secret and update config for the specified app',
+      {
+        app: sharedArgs.app,
+        space: sharedArgs.space,
+        environment: sharedArgs.environment
+      },
+      regenerateClient.bind(null, appkit)
+    )
+  },
+  update() {
+    // do nothing.
+  },
+  group: 'client',
+  help: 'Regenerate your client_secret and update config for the specified app',
+  primary: false
+}
+
+
+/***/ }),
+
 /***/ 26:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -432,6 +495,13 @@ if (typeof process === 'undefined' || process.type === 'renderer') {
   module.exports = __webpack_require__(317);
 }
 
+
+/***/ }),
+
+/***/ 87:
+/***/ (function(module) {
+
+module.exports = require("os");
 
 /***/ }),
 
@@ -1202,6 +1272,191 @@ function localstorage() {
 
 /***/ }),
 
+/***/ 247:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+const os = __webpack_require__(87);
+const hasFlag = __webpack_require__(364);
+
+const env = process.env;
+
+let forceColor;
+if (hasFlag('no-color') ||
+	hasFlag('no-colors') ||
+	hasFlag('color=false')) {
+	forceColor = false;
+} else if (hasFlag('color') ||
+	hasFlag('colors') ||
+	hasFlag('color=true') ||
+	hasFlag('color=always')) {
+	forceColor = true;
+}
+if ('FORCE_COLOR' in env) {
+	forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
+}
+
+function translateLevel(level) {
+	if (level === 0) {
+		return false;
+	}
+
+	return {
+		level,
+		hasBasic: true,
+		has256: level >= 2,
+		has16m: level >= 3
+	};
+}
+
+function supportsColor(stream) {
+	if (forceColor === false) {
+		return 0;
+	}
+
+	if (hasFlag('color=16m') ||
+		hasFlag('color=full') ||
+		hasFlag('color=truecolor')) {
+		return 3;
+	}
+
+	if (hasFlag('color=256')) {
+		return 2;
+	}
+
+	if (stream && !stream.isTTY && forceColor !== true) {
+		return 0;
+	}
+
+	const min = forceColor ? 1 : 0;
+
+	if (process.platform === 'win32') {
+		// Node.js 7.5.0 is the first version of Node.js to include a patch to
+		// libuv that enables 256 color output on Windows. Anything earlier and it
+		// won't work. However, here we target Node.js 8 at minimum as it is an LTS
+		// release, and Node.js 7 is not. Windows 10 build 10586 is the first Windows
+		// release that supports 256 colors. Windows 10 build 14931 is the first release
+		// that supports 16m/TrueColor.
+		const osRelease = os.release().split('.');
+		if (
+			Number(process.versions.node.split('.')[0]) >= 8 &&
+			Number(osRelease[0]) >= 10 &&
+			Number(osRelease[2]) >= 10586
+		) {
+			return Number(osRelease[2]) >= 14931 ? 3 : 2;
+		}
+
+		return 1;
+	}
+
+	if ('CI' in env) {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+			return 1;
+		}
+
+		return min;
+	}
+
+	if ('TEAMCITY_VERSION' in env) {
+		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
+	}
+
+	if (env.COLORTERM === 'truecolor') {
+		return 3;
+	}
+
+	if ('TERM_PROGRAM' in env) {
+		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+		switch (env.TERM_PROGRAM) {
+			case 'iTerm.app':
+				return version >= 3 ? 3 : 2;
+			case 'Apple_Terminal':
+				return 2;
+			// No default
+		}
+	}
+
+	if (/-256(color)?$/i.test(env.TERM)) {
+		return 2;
+	}
+
+	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+		return 1;
+	}
+
+	if ('COLORTERM' in env) {
+		return 1;
+	}
+
+	if (env.TERM === 'dumb') {
+		return min;
+	}
+
+	return min;
+}
+
+function getSupportLevel(stream) {
+	const level = supportsColor(stream);
+	return translateLevel(level);
+}
+
+module.exports = {
+	supportsColor: getSupportLevel,
+	stdout: getSupportLevel(process.stdout),
+	stderr: getSupportLevel(process.stderr)
+};
+
+
+/***/ }),
+
+/***/ 258:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const buildAxiosWithEnvAndAuth = __webpack_require__(489)
+
+async function updateClient (appkit, args) {
+  let task = appkit.terminal.task(
+    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+  )
+  task.start()
+
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space =
+    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const type =
+    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
+  const environment =
+    typeof args.environment === 'string'
+      ? args.environment.toLowerCase()
+      : args.environment
+
+  try {
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+    await authAxios.post(`/coreauth/client/update`, {
+      app: app,
+      ...(space ? { space: space } : {}),
+      redirect_uris: args.post_login_url,
+      returnto_uris: args.post_logout_url,
+      type: type
+    })
+
+    task.end('ok')
+  } catch (err) {
+    task.end('error')
+    appkit.terminal.print(
+      err.response && err.response.data.error ? err.response.data.error : err,
+      'An error occured while attempting to update your Core-Auth OAuth Client\n'
+    )
+  }
+}
+
+module.exports = updateClient
+
+
+/***/ }),
+
 /***/ 283:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -1293,7 +1548,7 @@ exports.useColors = useColors;
 exports.colors = [ 6, 2, 3, 4, 5, 1 ];
 
 try {
-  var supportsColor = __webpack_require__(858);
+  var supportsColor = __webpack_require__(247);
   if (supportsColor && supportsColor.level >= 2) {
     exports.colors = [
       20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68,
@@ -1516,6 +1771,63 @@ module.exports.default = axios;
 
 /***/ }),
 
+/***/ 354:
+/***/ (function(module) {
+
+const app = {
+    alias: 'a',
+    string: true,
+    demand: true,
+    description: 'An existing app that needs client credentials'
+  },
+  space = {
+    alias: 's',
+    string: true,
+    demand: false,
+    description:
+      "The space which the app belongs to (Production does not allow unsecure 'http' URLs)"
+  },
+  post_login_url = {
+    alias: 'r',
+    string: true,
+    demand: false,
+    description:
+      'URL that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
+  },
+  post_logout_url = {
+    alias: 'l',
+    string: true,
+    demand: false,
+    description:
+      'URL that the client can redirect a user to upon logging out of sessions (Can be passed multiple times)'
+  },
+  type = {
+    alias: 't',
+    string: true,
+    demand: true,
+    description:
+      '[WEB|MOBILE|API] which describes the Type of OAuth Client your app needs'
+  },
+  environment = {
+    alias: 'e',
+    string: true,
+    demand: true,
+    description:
+      '[QA|STG|PRD] describes which Core Auth environment the credentials will be created'
+  }
+
+module.exports = {
+  app,
+  space,
+  post_login_url,
+  post_logout_url,
+  type,
+  environment
+}
+
+
+/***/ }),
+
 /***/ 357:
 /***/ (function(module) {
 
@@ -1526,7 +1838,23 @@ module.exports = require("assert");
 /***/ 361:
 /***/ (function(module) {
 
-module.exports = {"name":"axios","version":"0.19.0","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test && bundlesize","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://github.com/axios/axios","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"typings":"./index.d.ts","dependencies":{"follow-redirects":"1.5.10","is-buffer":"^2.0.2"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.0.tgz","_integrity":"sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==","_from":"axios@0.19.0"};
+module.exports = {"_args":[["axios@0.19.0","/Users/tyler/workspace/cli-core-auth-plugin"]],"_from":"axios@0.19.0","_id":"axios@0.19.0","_inBundle":false,"_integrity":"sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.19.0","name":"axios","escapedName":"axios","rawSpec":"0.19.0","saveSpec":null,"fetchSpec":"0.19.0"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.0.tgz","_spec":"0.19.0","_where":"/Users/tyler/workspace/cli-core-auth-plugin","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"1.5.10","is-buffer":"^2.0.2"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"homepage":"https://github.com/axios/axios","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test && bundlesize","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","version":"0.19.0"};
+
+/***/ }),
+
+/***/ 364:
+/***/ (function(module) {
+
+"use strict";
+
+module.exports = (flag, argv) => {
+	argv = argv || process.argv;
+	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
+	const pos = argv.indexOf(prefix + flag);
+	const terminatorPos = argv.indexOf('--');
+	return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
+};
+
 
 /***/ }),
 
@@ -1604,6 +1932,57 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 /***/ (function(module) {
 
 module.exports = require("stream");
+
+/***/ }),
+
+/***/ 447:
+/***/ (function(module) {
+
+module.exports = {
+  local: {
+    url: 'http://localhost:3000'
+  },
+  qa: {
+    url: 'https://ssoinject-core-qa.alamoapp.octanner.io'
+  },
+  stg: {
+    url: 'https://ssoinject-core-stg.alamoapp.octanner.io'
+  },
+  prd: {
+    url: 'https://ssoinject-core-prd.alamoapp.octanner.io'
+  }
+}
+
+
+/***/ }),
+
+/***/ 489:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const axios = __webpack_require__(53)
+const environments = __webpack_require__(447)
+
+const verifyEnv = function (environment) {
+  var env = environments[environment.toLowerCase()]
+  if (!env) {
+    throw new Error(`environment ${environment} does not exist`)
+  }
+  return env
+}
+
+const buildAxiosWithEnvAndAuth = function (appkit, environment) {
+  var env = verifyEnv(environment)
+  return axios.create({
+    baseURL: env.url,
+    headers: {
+      Authorization: `Bearer ${appkit.account.password}`,
+      'x-username': `${appkit.account.password}`
+    }
+  })
+}
+
+module.exports = buildAxiosWithEnvAndAuth
+
 
 /***/ }),
 
@@ -2132,13 +2511,6 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = require("path");
-
-/***/ }),
-
 /***/ 631:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -2569,32 +2941,91 @@ module.exports = (
 /***/ 689:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-function __ncc_wildcard$0 (arg) {
-  if (arg === "client.js") return __webpack_require__(882);
-}
-'use strict'
+"use strict";
 
-const path = __webpack_require__(622)
-const fs = __webpack_require__(747)
 
-let dir = __webpack_require__.ab + "commands"
+const client = __webpack_require__(882)
+const remove = __webpack_require__(718)
+const regenerate = __webpack_require__(17)
 
 module.exports = {
-  init:function(appkit) {
-    fs.readdirSync(__webpack_require__.ab + "commands")
-      .filter(f => path.extname(f) === '.js')
-      .map(f => __ncc_wildcard$0(f).init(appkit))
+  init: function (appkit) {
+    client.init(appkit)
+    remove.init(appkit)
+    regenerate.init(appkit)
   },
   update: () => {
-    // What do you want to do once the plugin has been updated, 
+    // What do you want to do once the plugin has been updated,
     // this is executed AFTER the plugin has had the latest set of code
     // pulled, so its a "post" update operation.
   },
-  'group': 'coreauth',
-  'help': 'Manage your App\'s Core Auth OAuth Client Credentials',
-  'primary': false
-} 
+  group: 'coreauth',
+  help: "Manage your App's Core Auth OAuth Client Credentials",
+  primary: false
+}
 
+
+/***/ }),
+
+/***/ 718:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+const buildAxiosWithEnvAndAuth = __webpack_require__(489)
+const sharedArgs = __webpack_require__(354)
+
+async function removeClient(appkit, args) {
+  let task = appkit.terminal.task(
+    `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+  )
+  task.start()
+
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space =
+    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const environment =
+    typeof args.environment === 'string'
+      ? args.environment.toLowerCase()
+      : args.environment
+
+  try {
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+    await authAxios.post('/coreauth/client/remove', {
+      app: app,
+      ...(space ? { space: space } : {})
+    })
+
+    task.end('ok')
+  } catch (err) {
+    task.end('error')
+    appkit.terminal.print(
+      err.response && err.response.data.error ? err.response.data.error : err,
+      'An error occured while attempting to remove your Core-Auth OAuth Client\n'
+    )
+  }
+}
+
+module.exports = {
+  init(appkit) {
+    appkit.args.command(
+      'core:auth:client:remove',
+      'Removes your client credentials from the config for the specified app',
+      {
+        app: sharedArgs.app,
+        space: sharedArgs.space
+      },
+      removeClient.bind(null, appkit)
+    )
+  },
+  update() {
+    // do nothing.
+  },
+  group: 'client',
+  help: 'Removes your client credentials from the config for the specified app',
+  primary: false
+}
 
 
 /***/ }),
@@ -2628,13 +3059,6 @@ module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
 
-
-/***/ }),
-
-/***/ 747:
-/***/ (function(module) {
-
-module.exports = require("fs");
 
 /***/ }),
 
@@ -3002,10 +3426,48 @@ module.exports = require("url");
 
 /***/ }),
 
-/***/ 858:
-/***/ (function() {
+/***/ 838:
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-eval("require")("supports-color");
+const buildAxiosWithEnvAndAuth = __webpack_require__(489)
+
+async function createClient (appkit, args) {
+  let task = appkit.terminal.task(
+    `Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+  )
+  task.start()
+
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space =
+    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const type =
+    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
+  const environment =
+    typeof args.environment === 'string'
+      ? args.environment.toLowerCase()
+      : args.environment
+
+  try {
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+    await authAxios.post('/coreauth/client/create', {
+      app: app,
+      ...(space ? { space: space } : {}),
+      redirect_uris: args.post_login_url,
+      returnto_uris: args.post_logout_url,
+      type: type
+    })
+
+    task.end('ok')
+  } catch (err) {
+    task.end('error')
+    appkit.terminal.print(
+      err.response && err.response.data.error ? err.response.data.error : err,
+      'An error occured while attempting to create a Core-Auth OAuth Client\n'
+    )
+  }
+}
+
+module.exports = createClient
 
 
 /***/ }),
@@ -3119,128 +3581,33 @@ module.exports = function spread(callback) {
 "use strict";
 
 
-var axios = __webpack_require__(53);
-
-var environments = {
-  local: {
-    url: 'http://localhost:3000'
-  },
-  qa: {
-    url: 'https://ssoinject-core-qa.alamoapp.octanner.io'
-  },
-  stg: {
-    url: 'https://ssoinject-core-stg.alamoapp.octanner.io'
-  },
-  prd: {
-    url: 'https://ssoinject-core-prd.alamoapp.octanner.io'
-  }
-};
-
-const verifyEnv = function(environment) {
-  var env = environments[environment.toLowerCase()];
-  if (!env) {
-    throw new Error(`environment ${environment} does not exist`);
-  }
-  return env;
-};
-
-const buildAxiosWithEnvAndAuth = function(appkit, environment) {
-  var env = verifyEnv(environment);
-  return axios.create({
-    baseURL: env.url,
-    headers: {
-      Authorization: `Bearer ${appkit.account.password}`,
-      'x-username': `${appkit.account.password}`
-    }
-  });
-};
-
-async function create_core_auth_client(appkit, args) {
-  let task = appkit.terminal.task(`Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`);
-  task.start();
-
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
-    await authAxios.post(
-      `/credentials/addssotoapplication/${args.app}/${args.space}`,
-      {
-        redirect_uris: args.post_login_url,
-        returnto_uris: args.post_logout_url,
-        type: args.type
-      }
-    );
-
-    task.end('ok');
-  } catch (err) {
-    task.end('error');
-    appkit.terminal.print(err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to create a Core-Auth OAuth Client\n'
-    );
-  }
-}
+const createClient = __webpack_require__(838)
+const updateClient = __webpack_require__(258)
+const sharedArgs = __webpack_require__(354)
 
 module.exports = {
   init(appkit) {
-    const app = {
-        alias: 'a',
-        string: true,
-        demand: true,
-        description: 'An existing app that needs core auth credentials'
-      },
-      space = {
-        alias: 's',
-        string: true,
-        description: 'The space which the app belongs to. Production requires "https" URLs'
-      },
-      post_login_url = {
-        alias: 'r',
-        string: true,
-        demand: false,
-        description:
-          'URL that your app will be listening on for an "authorization_code" once a user authenticates. Can be passed multiple times'
-      },
-      post_logout_url = {
-        alias: 'l',
-        string: true,
-        demand: false,
-        description:
-          'URL that the client can redirect a user to upon logging out of sessions. Can be passed multiple times'
-      },
-      type = {
-        alias: 't',
-        string: true,
-        demand: true,
-        description:
-          '[WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs'
-      },
-      environment = {
-        alias: 'e',
-        string: true,
-        description:
-          '[qa|stg|prd] describes which Core Auth environment the credentials will be created'
-      };
-
-    appkit.args.command(
-      'core:auth:client:create',
-      'Create client credentials and assign them to the specified app',
-      {
-        app,
-        space,
-        post_login_url,
-        post_logout_url,
-        type,
-        environment
-      },
-      create_core_auth_client.bind(null, appkit)
-    );
+    appkit.args
+      .command(
+        'core:auth:client:create',
+        'Create client credentials and assign them to the specified app',
+        sharedArgs,
+        createClient.bind(null, appkit)
+      )
+      .command(
+        'core:auth:client:update',
+        'Update client credentials and config for the specified app',
+        sharedArgs,
+        updateClient.bind(null, appkit)
+      )
   },
   update() {
     // do nothing.
   },
-  group: 'coreauth',
-  help: 'Manage your Akkeris App\'s Core Auth OAuth Client Credentials',
+  group: 'client',
+  help: "Manage your App's Core Auth Client Credentials and Configuration",
   primary: true
-};
+}
 
 
 /***/ }),

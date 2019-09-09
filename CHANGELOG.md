@@ -1,11 +1,20 @@
 # Changelog
 
+## 1.3.0 / 2019-09-3
+
+- Updated Create command API route and new command routes
+- Updated commands
+  - `remove`
+    - `type`, `environment` are no longer required
+  - `regenerate`
+    - `type` is no longer required
+
 ## 1.2.0 / 2019-08-16
 
-- Added more Client commands to assist in maintaining client credentials:
-  - `remove`
-  - `update`
-  - `regenerate`
+- Added more Client commands to assist in maintaining Client credentials:
+  - `remove` - Removes Client credentials from Akkeris Config only
+  - `update` - Updates the Core Auth Client and Akkeris Config
+  - `regenerate` - Regenerates the Apps Client Secret and updates Akkeris Config
 
 ## 1.1.3 / 2019-08-05
 
