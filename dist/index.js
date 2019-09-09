@@ -47,9 +47,9 @@ module.exports =
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
-const args = __webpack_require__(354)
+const sharedArgs = __webpack_require__(354)
 
-async function regenerateClient (appkit, args) {
+async function regenerateClient(appkit, args) {
   let task = appkit.terminal.task(
     `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
   )
@@ -83,19 +83,19 @@ async function regenerateClient (appkit, args) {
 }
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args.command(
       'core:auth:client:regeneratesecret',
       'Regenerate your client_secret and update config for the specified app',
       {
-        app: args.app,
-        space: args.space,
-        environment: args.environment
+        app: sharedArgs.app,
+        space: sharedArgs.space,
+        environment: sharedArgs.environment
       },
       regenerateClient.bind(null, appkit)
     )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',
@@ -2974,9 +2974,9 @@ module.exports = {
 
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
-const args = __webpack_require__(354)
+const sharedArgs = __webpack_require__(354)
 
-async function removeClient (appkit, args) {
+async function removeClient(appkit, args) {
   let task = appkit.terminal.task(
     `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
   )
@@ -3008,19 +3008,18 @@ async function removeClient (appkit, args) {
 }
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args.command(
       'core:auth:client:remove',
       'Removes your client credentials from the config for the specified app',
       {
-        app: args.app,
-        space: args.space,
-        environment: args.environment
+        app: sharedArgs.app,
+        space: sharedArgs.space
       },
       removeClient.bind(null, appkit)
     )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',
@@ -3584,25 +3583,25 @@ module.exports = function spread(callback) {
 
 const createClient = __webpack_require__(838)
 const updateClient = __webpack_require__(258)
-const args = __webpack_require__(354)
+const sharedArgs = __webpack_require__(354)
 
 module.exports = {
-  init (appkit) {
+  init(appkit) {
     appkit.args
       .command(
         'core:auth:client:create',
         'Create client credentials and assign them to the specified app',
-        args,
+        sharedArgs,
         createClient.bind(null, appkit)
       )
       .command(
         'core:auth:client:update',
         'Update client credentials and config for the specified app',
-        args,
+        sharedArgs,
         updateClient.bind(null, appkit)
       )
   },
-  update () {
+  update() {
     // do nothing.
   },
   group: 'client',
