@@ -4,14 +4,19 @@ async function regenerateClient(appkit, args) {
   let task = appkit.terminal.task(`Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`);
   task.start();
 
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space = typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const environment = typeof args.environment === 'string' ? args.environment.toLowerCase() : args.environment
+
   try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment);
     await authAxios.post(
-      `/credentials/regenerate/${args.app}/${args.space}`,
+      '/coreauth/client/regenerate',
       {
+        app: app,
+        ...(space ? { space: space } : {}),
         redirect_uris: args.post_login_url,
         returnto_uris: args.post_logout_url,
-        type: args.type
       }
     );
 
@@ -24,4 +29,43 @@ async function regenerateClient(appkit, args) {
   }
 }
 
-module.exports = regenerateClient
+module.exports = {
+  init(appkit) {
+    const app = {
+        alias: 'a',
+        string: true,
+        demand: true,
+        description: 'An existing app that needs client credentials'
+      },
+      space = {
+        alias: 's',
+        string: true,
+        demand: false,
+        description: 'The space which the app belongs to (Production does not allow unsecure \'http\' URLs)'
+      },
+      environment = {
+        alias: 'e',
+        string: true,
+        demand: true,
+        description:
+          '[QA|STG|PRD] describes which Core Auth environment the credentials will be created'
+      };
+
+      appkit.args.command(
+        'core:auth:client:regeneratesecret',
+        'Regenerate your client_secret and update config for the specified app',
+        {
+          app,
+          space,
+          environment
+        },
+        regenerateClient.bind(null, appkit)
+      );
+  },
+  update() {
+    // do nothing.
+  },
+  group: 'client',
+  help: 'Regenerate your client_secret and update config for the specified app',
+  primary: false
+};

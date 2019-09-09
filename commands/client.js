@@ -2,8 +2,6 @@
 
 const createClient = require('./client/create')
 const updateClient = require('./client/update')
-const removeClient = require('./client/remove')
-const regenerateClient = require('./client/regenerate')
 
 module.exports = {
   init(appkit) {
@@ -16,6 +14,7 @@ module.exports = {
       space = {
         alias: 's',
         string: true,
+        demand: false,
         description: 'The space which the app belongs to (Production does not allow unsecure \'http\' URLs)'
       },
       post_login_url = {
@@ -42,8 +41,9 @@ module.exports = {
       environment = {
         alias: 'e',
         string: true,
+        demand: true,
         description:
-          '[qa|stg|prd] describes which Core Auth environment the credentials will be created'
+          '[QA|STG|PRD] describes which Core Auth environment the credentials will be created'
       };
 
     appkit.args.command(
@@ -58,9 +58,8 @@ module.exports = {
         environment
       },
       createClient.bind(null, appkit)
-    );
-
-    appkit.args.command(
+    )
+    .command(
       'core:auth:client:update',
       'Update client credentials and config for the specified app',
       {
@@ -73,33 +72,11 @@ module.exports = {
       },
       updateClient.bind(null, appkit)
     );
-
-    appkit.args.command(
-      'core:auth:client:remove',
-      'Removes your client credentials from the config for the specified app',
-      {
-        app,
-        space,
-        environment
-      },
-      removeClient.bind(null, appkit)
-    );
-
-    appkit.args.command(
-      'core:auth:client:regeneratesecret',
-      'Regenerate your client_secret and update config for the specified app',
-      {
-        app,
-        space,
-        environment
-      },
-      regenerateClient.bind(null, appkit)
-    );
   },
   update() {
     // do nothing.
   },
-  group: 'coreauth',
+  group: 'client',
   help: 'Manage your App\'s Core Auth Client Credentials and Configuration',
   primary: true
 };

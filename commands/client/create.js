@@ -4,14 +4,21 @@ async function createClient(appkit, args) {
   let task = appkit.terminal.task(`Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`);
   task.start();
 
+  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
+  const space = typeof args.space === 'string' ? args.space.toLowerCase() : args.space
+  const type = typeof args.type === 'string' ? args.type.toUpperCase() : args.type
+  const environment = typeof args.environment === 'string' ? args.environment.toLowerCase() : args.environment
+
   try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, args.environment);
+    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment);
     await authAxios.post(
-      `/credentials/addssotoapplication/${args.app}/${args.space}`,
+      '/coreauth/client/create',
       {
+        app: app,
+        ...(space ? { space: space } : {}),
         redirect_uris: args.post_login_url,
         returnto_uris: args.post_logout_url,
-        type: args.type
+        type: type
       }
     );
 

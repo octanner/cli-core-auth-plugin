@@ -41,7 +41,9 @@ Run `npm run build` and commit changes before running `npm version`.
 
 ## Usage
 
-### Web Client
+### Create Client
+
+#### Web Client
 
 ```zsh
 # Local
@@ -62,7 +64,7 @@ ak core:auth:credentials:create -a app -s space-stg -e stg -r http://localhost:3
 ak core:auth:credentials:create -a app -s space-prd -e prd -r https://app.octanner.io/auth/callback -l https://app.octanner.io/auth/login
 ```
 
-### API Service
+#### API Service
 
 ```zsh
 # Stage
@@ -75,7 +77,7 @@ ak core:auth:credentials:create \
 ak core:auth:credentials:create -a app -s space-prd -e prd
 ```
 
-### Mobile App
+#### Mobile App
 
 ```zsh
 # Stage
@@ -90,7 +92,7 @@ ak core:auth:credentials:create \
 ak core:auth:credentials:create -a app -s space-prd -e prd -r oct-auth://mobile-app/callback -l oct-auth://mobile-app/logout
 ```
 
-## Options
+#### Options
 
 ```zsh
 $ ak core:auth:credentials:create --help
@@ -109,9 +111,14 @@ Options:
   --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created                                          [string]
 ```
 
-## FUTURE TODOS
+### Update Client
 
-- [x] `ak core:auth:client:create`
-- [x] `ak core:auth:client:update`
-- [x] `ak core:auth:client:remove`
-- [x] `ak core:auth:client:regeneratesecret`
+TODO
+
+### Regenerate Client
+
+TODO
+
+### Remove Client
+
+TODO
