@@ -1,10 +1,13 @@
 'use strict'
 
-const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
-const sharedArgs = require('../../utils/shared-arguments')
+function filterConfig (config) {
+  return Object.keys(config)
+    .filter((key) => key.startsWith('CORE_AUTH_'))
+    .reduce((res, key) => ((res[key] = null), res), {}) // eslint-disable-line no-sequences
+}
 
-async function removeClient(appkit, args) {
-  let task = appkit.terminal.task(
+async function removeClient (appkit, args) {
+  const task = appkit.terminal.task(
     `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
   )
   task.start()
@@ -12,45 +15,33 @@ async function removeClient(appkit, args) {
   const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
   const space =
     typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  const appSpace = app.includes(space) ? app : app + space
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/remove', {
-      app: app,
-      ...(space ? { space: space } : {})
+  appkit.api.get(`/apps/${app}/config-vars`)
+    .then(appConfig => {
+      if (!Object.keys(appConfig).length) {
+        throw new Error(app + ' does not have any configuration to remove\n')
+      }
+
+      return filterConfig(appConfig)
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to remove your Core-Auth OAuth Client\n'
-    )
-  }
+    .then(config => {
+      appkit.api.patch(JSON.stringify(config), `/apps/${appSpace}/config-vars`)
+        .then(response => {
+          task.end('ok')
+        })
+        .catch(err => {
+          if (err) throw err
+        })
+    })
+    .catch(err => {
+      console.error(err)
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to remove your Core-Auth OAuth Client\n'
+      )
+    })
 }
 
-module.exports = {
-  init(appkit) {
-    appkit.args.command(
-      'core:auth:client:remove',
-      'Removes your client credentials from the config for the specified app',
-      {
-        app: sharedArgs.app,
-        space: sharedArgs.space,
-        environment: sharedArgs.environment
-      },
-      removeClient.bind(null, appkit)
-    )
-  },
-  update() {
-    // do nothing.
-  },
-  group: 'client',
-  help: 'Removes your client credentials from the config for the specified app',
-  primary: false
-}
+module.exports = removeClient

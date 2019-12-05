@@ -37,6 +37,9 @@ To edit the group, name, or other details, edit `plugin.js`.
 
 To edit the existing commands or add to them, edit the respective command in `/commands`.
 
+To test locally, install the package locally using, `ak plugin:add`
+
+**Lastly**
 Run `npm run build` and commit changes before running `npm version`.
 
 ## Usage
@@ -110,15 +113,3 @@ Options:
   --type, -t              [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                                                    [string]
   --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created                                          [string]
 ```
-
-### Update Client
-
-TODO
-
-### Regenerate Client
-
-TODO
-
-### Remove Client
-
-TODO

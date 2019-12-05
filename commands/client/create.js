@@ -1,7 +1,7 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 async function createClient (appkit, args) {
-  let task = appkit.terminal.task(
+  const task = appkit.terminal.task(
     `Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
   )
   task.start()
@@ -21,8 +21,8 @@ async function createClient (appkit, args) {
     await authAxios.post('/coreauth/client/create', {
       app: app,
       ...(space ? { space: space } : {}),
-      redirect_uris: args.post_login_url,
-      returnto_uris: args.post_logout_url,
+      redirect_uris: args.postLoginURL,
+      returnto_uris: args.postLogoutURL,
       type: type
     })
 

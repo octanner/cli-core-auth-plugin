@@ -1,8 +1,9 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
+const remove = require('./remove')
 
-async function regenerateClient (appkit, args) {
+async function deactivateClient (appkit, args) {
   const task = appkit.terminal.task(
-    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
+    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
   )
   task.start()
 
@@ -15,22 +16,22 @@ async function regenerateClient (appkit, args) {
       : args.environment
 
   try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/regenerate', {
+    const authAxios = buildAxiosWithEnvAndAuth(environment)
+    await authAxios.post('/coreauth/client/deactivate', {
       app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.postLoginURL,
-      returnto_uris: args.postLogoutURL
+      ...(space ? { space: space } : {})
     })
+
+    await remove(appkit, args)
 
     task.end('ok')
   } catch (err) {
     task.end('error')
     appkit.terminal.print(
       err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to regenerate the Core-Auth OAuth Client Secret\n'
+      'An error occured while attempting to update your Core-Auth OAuth Client\n'
     )
   }
 }
 
-module.exports = regenerateClient
+module.exports = deactivateClient
