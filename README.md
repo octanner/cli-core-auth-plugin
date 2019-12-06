@@ -1,17 +1,40 @@
-# Core | cli-core-auth-plugin
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-Use this Akkeris CLI plugin to create a Core Auth OAuth Client and add it's credentials to your Akkeris App by using this plugin.
+# Core | Auth | cli-core-auth-plugin
 
-> Creates a new Core-Auth OAuth Client and adds the following as config VARs to your app:
->
-> ```json
-> {
->   "CORE_AUTH_CLIENT_ID": "clientId",
->   "CORE_AUTH_CLIENT_SECRET": "clientSecret",
->   "CORE_AUTH_POST_LOGIN_URLS": "[\"redirectUris\"]",
->   "CORE_AUTH_POST_LOGOUT_URLS": "[\"returntoUris\"]"
-> }
-> ```
+## Usage
+
+Maintains Core OAuth2 Clients for Web, Mobile, or APIs hosted on Akkeris
+
+- Clients
+  - create
+  - update
+  - regenerate (generates and updates env-config with a new client_secret)
+  - deactivate (disables client, useful for preview apps & compromised clients)
+  - remove config from Akkeris env-config (does not deactivate)
+
+## Check config
+
+View your app in Akkeris or use 
+
+```zsh
+ak config -a {app_name}
+```
+
+## Options
+
+```zsh
+$ ak help coreauth
+
+Akkeris CLI Help
+
+Coreauth
+  • aka.js coreauth:client:create      Create client credentials and assign them to the specified app
+  • aka.js coreauth:client:deactivate  Deactivate client credentials and removes the config from the specified app
+  • aka.js coreauth:client:regenerate  Regenerate your client_secret and update config for the specified app
+  • aka.js coreauth:client:remove      Removes your client credentials from the config for the specified app
+  • aka.js coreauth:client:update      Update client credentials and config for the specified app
+```
 
 ## Github
 
@@ -19,16 +42,22 @@ Use this Akkeris CLI plugin to create a Core Auth OAuth Client and add it's cred
 
 ## Install
 
+Use Akkeris:
+
+```zsh
+ak plugins:install coreauth
+```
+
 Use HTTPS:
 
 ```zsh
-aka plugins:install https://github.com/octanner/cli-core-auth-plugin
+ak plugins:install https://github.com/octanner/cli-core-auth-plugin
 ```
 
 or via SSH:
 
 ```zsh
-aka plugins:install git@github.com:octanner/cli-core-auth-plugin.git
+ak plugins:install git@github.com:octanner/cli-core-auth-plugin.git
 ```
 
 ## Developing
@@ -37,79 +66,38 @@ To edit the group, name, or other details, edit `plugin.js`.
 
 To edit the existing commands or add to them, edit the respective command in `/commands`.
 
-To test locally, install the package locally using, `ak plugin:add`
+### Environment
 
-**Lastly**
-Run `npm run build` and commit changes before running `npm version`.
+Clone this repo: `git clone git@github.com:octanner/cli-core-auth-plugin.git`.
 
-## Usage
-
-### Create Client
-
-#### Web Client
+Add a symbolic link to the development folder you created: 
 
 ```zsh
-# Local
-ak core:auth:client:create \
--a ccap \
--s core-dev \
--r http://localhost:3000/auth/callback \
--r https://app-stg.octanner.io/auth/callback \
--l http://localhost:3000/auth/login \
--l https://app-stg.octanner.io/auth/login \
--e local \
--t WEB
-
-# Stage
-ak core:auth:credentials:create -a app -s space-stg -e stg -r http://localhost:3000/auth/callback -r https://app-stg.octanner.io/auth/callback -l http://localhost:3000/auth/login -l https://app-stg.octanner.io/auth/login
-
-# Production
-ak core:auth:credentials:create -a app -s space-prd -e prd -r https://app.octanner.io/auth/callback -l https://app.octanner.io/auth/login
+ln -s ~/.akkeris/plugins/coreauth {location of repo folder}
 ```
 
-#### API Service
+**Note: `ak update` will fail when trying to update this plugin, that's expected.**
+
+### Testing
+
+You must run 
 
 ```zsh
-# Stage
-ak core:auth:credentials:create \
--a app \
--s space-stg \
--e stg
-
-# Production
-ak core:auth:credentials:create -a app -s space-prd -e prd
+npm run build
 ```
 
-#### Mobile App
+when wanting to test new code, it runs `index.js` which is symbolicly linked to `/dist/index.js` -> compiled from `ncc`.
+
+### Committing & Deploying
+
+Build the code to compile it & and commit it
 
 ```zsh
-# Stage
-ak core:auth:credentials:create \
--a app \
--s space-stg \
--e stg \
--r oct-auth://mobile-app/callback \
--l oct-auth://mobile-app/logout
-
-# Production
-ak core:auth:credentials:create -a app -s space-prd -e prd -r oct-auth://mobile-app/callback -l oct-auth://mobile-app/logout
+npm run build
 ```
 
-#### Options
+Then run:
 
 ```zsh
-$ ak core:auth:credentials:create --help
-ak core:auth:credentials:create
-
-Manage your app\'s Core-Auth OAuth Client Credentials
-
-Options:
-  --version               Show version number                                                                                                         [boolean]
-  --help                  Show help                                                                                                                   [boolean]
-  --app, -a               An existing app that needs core auth credentials                                                                            [string] [required]
-  --space, -s             Space to which the app belongs to. Production requires "https" URLs                                                         [string] [required]
-  --post_login_url, -r    URL that your app will be listening on for an "authorization_code" once a user authenticates. Can be passed multiple times  [string]
-  --post_logout_url, -l   URL that the client can redirect a user to upon logging out of sessions. Can be passed multiple times                       [string]
-  --type, -t              [WEB|MOBILE|API] which describes the Type of OAUTH Client your app needs                                                    [string]
-  --environment, -e       [qa|stg|prd] describes which Core Auth environment the credentials will be created                                          [string]
+npm version {major|minor|patch}
 ```
