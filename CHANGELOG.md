@@ -7,20 +7,18 @@
     - `app`, `environment` are required
 - Refactored to use appkit instead for akkeris config
 - Updated responses/tasks
+- Reformatting using standardJS
 
 ### DEPRECATIONS
 
+- Removed requiring the **space**, add it to the **app** instead
+  - i.e. Use `-a ccap-core-dev` instead of `-a ccap -s core-dev` 
 - Renamed commands from `core:auth...` -> `coreauth:...`
-  - i.e. `core:auth:client:create`
+  - i.e. Use `coreauth:client:deactivate -a ccap-core-dev` instead of `core:auth:client:deactivate -a ccap-core-dev`
 - Update using the flag `--post_login_url` -> `--postLoginURL`
 - Update using the flag `--post_logout_url` -> `--postLogoutURL`
 
-## 1.3.1 / 2019-12-05
-
-- Updated error handling to re-login to akkeris on `401`
-- Reformatting using standardJS
-
-## 1.3.0 / 2019-09-03
+## 1.3.1 / 2019-09-03
 
 - Updated Create command API route and new command routes
 - Updated commands

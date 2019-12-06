@@ -10,7 +10,7 @@ const space = {
   string: true,
   demand: false,
   description:
-      "The space which the app belongs to (Production does not allow unsecure 'http' URLs)"
+      'The space which the app belongs to'
 }
 
 const postLoginURL = {
