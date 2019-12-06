@@ -15,14 +15,14 @@ function deactivateClient (appkit, args) {
   if (space) app = app.includes(space) ? app : app + space
 
   const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-  authAxios.post('/coreauth/client/deactivate', { app })
+  return authAxios.post('/coreauth/client/deactivate', { app })
     .then(() => clientTask.end('ok'))
     .then(() => {
       const configTask = appkit.terminal.task(
         `Removing Core Auth Client Credentials Config for ${args.app}-${args.space}`
       )
       configTask.start()
-      removeConfig(appkit, app)
+      return removeConfig(appkit, app)
         .then(() => configTask.end('ok'))
         .catch(err => {
           configTask.end('error')

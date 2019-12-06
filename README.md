@@ -15,11 +15,13 @@ Maintains Core OAuth2 Clients for Web, Mobile, or APIs hosted on Akkeris
 
 ## Check config
 
-View your app in Akkeris or use 
+View your app in Akkeris or use:
 
 ```zsh
 ak config -a {app_name}
 ```
+
+**NOTE: Production values will still be [redacted].**
 
 ## Options
 
@@ -73,7 +75,7 @@ Clone this repo: `git clone git@github.com:octanner/cli-core-auth-plugin.git`.
 Add a symbolic link to the development folder you created: 
 
 ```zsh
-ln -s ~/.akkeris/plugins/coreauth {location of repo folder}
+ln -s {location of repo folder} ~/.akkeris/plugins/coreauth
 ```
 
 **Note: `ak update` will fail when trying to update this plugin, that's expected.**

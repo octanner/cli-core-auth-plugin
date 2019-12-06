@@ -3031,7 +3031,7 @@ function removeClient (appkit, args) {
   /** Backwards compatability */
   if (space) app = app.includes(space) ? app : app + space
 
-  removeConfig(appkit, app)
+  return removeConfig(appkit, app)
     .then(() => task.end('ok'))
     .catch(err => {
       console.error(err)
