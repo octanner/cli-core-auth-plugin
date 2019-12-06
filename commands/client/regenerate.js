@@ -7,7 +7,7 @@ function regenerateClient (appkit, args) {
   task.start()
 
   let app = args.app.toLowerCase()
-  const space = args.space.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
   const environment = args.environment.toLowerCase()
 
   /** Backwards compatability */

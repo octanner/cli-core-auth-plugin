@@ -48,37 +48,31 @@ module.exports =
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
 
-async function regenerateClient (appkit, args) {
+function regenerateClient (appkit, args) {
   const task = appkit.terminal.task(
     `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/regenerate', {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.postLoginURL,
-      returnto_uris: args.postLogoutURL
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/regenerate', {
+    app
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to regenerate the Core Auth OAuth Client Secret\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to regenerate the Core Auth OAuth Client Secret\n'
-    )
-  }
 }
 
 module.exports = regenerateClient
@@ -1062,27 +1056,22 @@ function deactivateClient (appkit, args) {
   )
   clientTask.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
-  const appSpace = app.includes(space) ? app : app + space
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const environment = args.environment.toLowerCase()
+
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
 
   const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-  authAxios.post('/coreauth/client/deactivate', {
-    app: appSpace,
-    ...(space ? { space: space } : {})
-  })
+  authAxios.post('/coreauth/client/deactivate', { app })
     .then(() => clientTask.end('ok'))
     .then(() => {
       const configTask = appkit.terminal.task(
         `Removing Core Auth Client Credentials Config for ${args.app}-${args.space}`
       )
       configTask.start()
-      removeConfig(appkit, appSpace)
+      removeConfig(appkit, app)
         .then(() => configTask.end('ok'))
         .catch(err => {
           configTask.end('error')
@@ -1458,34 +1447,29 @@ async function updateClient (appkit, args) {
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const type =
-    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const type = args.type.toUpperCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/update', {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.postLoginURL,
-      returnto_uris: args.postLogoutURL,
-      type: type
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/update', {
+    app: app,
+    redirect_uris: args.postLoginURL,
+    returnto_uris: args.postLogoutURL,
+    type: type
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to update your Core Auth OAuth Client\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to update your Core Auth OAuth Client\n'
-    )
-  }
 }
 
 module.exports = updateClient
@@ -1822,7 +1806,7 @@ const space = {
   string: true,
   demand: false,
   description:
-      "The space which the app belongs to (Production does not allow unsecure 'http' URLs)"
+      'The space which the app belongs to'
 }
 
 const postLoginURL = {
@@ -3028,35 +3012,27 @@ function filterConfig (config) {
 async function removeConfig (appkit, app) {
   appkit.api.get(`/apps/${app}/config-vars`)
     .then(appConfig => {
-      if (!Object.keys(appConfig).length) {
-        throw new Error(app + ' does not have any configuration to remove\n')
-      }
+      if (!Object.keys(appConfig).length) throw new Error(app + ' does not have any configuration to remove\n')
 
       return filterConfig(appConfig)
     })
-    .then(config => {
-      appkit.api.patch(JSON.stringify(config), `/apps/${app}/config-vars`)
-        .catch(err => {
-          if (err) throw err
-        })
-    })
+    .then(config => appkit.api.patch(JSON.stringify(config), `/apps/${app}/config-vars`))
 }
 
-async function removeClient (appkit, args) {
+function removeClient (appkit, args) {
   const task = appkit.terminal.task(
     `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const appSpace = app.includes(space) ? app : app + space
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
 
-  removeConfig(appkit, appSpace)
-    .then(() => {
-      task.end('ok')
-    })
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  removeConfig(appkit, app)
+    .then(() => task.end('ok'))
     .catch(err => {
       console.error(err)
       task.end('error')
@@ -3477,40 +3453,35 @@ module.exports = require("url");
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
 
-async function createClient (appkit, args) {
+function createClient (appkit, args) {
   const task = appkit.terminal.task(
     `Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const type =
-    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const type = args.type.toUpperCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/create', {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.postLoginURL,
-      returnto_uris: args.postLogoutURL,
-      type: type
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/create', {
+    app: app,
+    redirect_uris: args.postLoginURL,
+    returnto_uris: args.postLogoutURL,
+    type: type
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to create a new Core Auth OAuth Client\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to create a new Core Auth OAuth Client\n'
-    )
-  }
 }
 
 module.exports = createClient

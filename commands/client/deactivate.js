@@ -7,27 +7,22 @@ function deactivateClient (appkit, args) {
   )
   clientTask.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
-  const appSpace = app.includes(space) ? app : app + space
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const environment = args.environment.toLowerCase()
+
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
 
   const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-  authAxios.post('/coreauth/client/deactivate', {
-    app: appSpace,
-    ...(space ? { space: space } : {})
-  })
+  authAxios.post('/coreauth/client/deactivate', { app })
     .then(() => clientTask.end('ok'))
     .then(() => {
       const configTask = appkit.terminal.task(
         `Removing Core Auth Client Credentials Config for ${args.app}-${args.space}`
       )
       configTask.start()
-      removeConfig(appkit, appSpace)
+      removeConfig(appkit, app)
         .then(() => configTask.end('ok'))
         .catch(err => {
           configTask.end('error')

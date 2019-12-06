@@ -23,7 +23,7 @@ function removeClient (appkit, args) {
   task.start()
 
   let app = args.app.toLowerCase()
-  const space = args.space.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
 
   /** Backwards compatability */
   if (space) app = app.includes(space) ? app : app + space
