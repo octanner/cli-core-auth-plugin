@@ -2,7 +2,7 @@ const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 async function updateClient (appkit, args) {
   const task = appkit.terminal.task(
-    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
@@ -31,7 +31,7 @@ async function updateClient (appkit, args) {
     task.end('error')
     appkit.terminal.print(
       err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to update your Core-Auth OAuth Client\n'
+      'An error occured while attempting to update your Core Auth OAuth Client\n'
     )
   }
 }

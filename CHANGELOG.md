@@ -1,21 +1,24 @@
 # Changelog
 
-## 1.4.0 / 2019-12-05
+## 2.0.0 / 2019-12-05
 
 - Added Deactivate Client command for deactivating a client and removing it from Akkeris
   - `deactivate`
     - `app`, `environment` are required
+- Refactored to use appkit instead for akkeris config
+- Updated responses/tasks
+
+### DEPRECATIONS
+
+- Renamed commands from `core:auth...` -> `coreauth:...`
+  - i.e. `core:auth:client:create`
+- Update using the flag `--post_login_url` -> `--postLoginURL`
+- Update using the flag `--post_logout_url` -> `--postLogoutURL`
 
 ## 1.3.1 / 2019-12-05
 
 - Updated error handling to re-login to akkeris on `401`
 - Reformatting using standardJS
-
-### DEPRECATIONS
-
-- Update using the flag `--post_login_url` -> `--postLoginURL`
-- Update using the flag `--post_logout_url` -> `--postLogoutURL`
-- Both will continue to work until future update
 
 ## 1.3.0 / 2019-09-03
 

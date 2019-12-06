@@ -3,7 +3,7 @@
 const create = require('./client/create')
 const update = require('./client/update')
 const deactivate = require('./client/deactivate')
-const remove = require('./client/remove')
+const { remove } = require('./client/remove')
 const regenerate = require('./client/regenerate')
 const sharedArgs = require('../utils/shared-arguments')
 

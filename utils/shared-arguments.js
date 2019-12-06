@@ -48,9 +48,7 @@ const environment = {
 module.exports = {
   app,
   space,
-  post_login_url: postLoginURL,
   postLoginURL,
-  post_logout_url: postLogoutURL,
   postLogoutURL,
   type,
   environment

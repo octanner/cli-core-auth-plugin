@@ -2,7 +2,7 @@ const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 async function regenerateClient (appkit, args) {
   const task = appkit.terminal.task(
-    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
+    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}`
   )
   task.start()
 
@@ -28,7 +28,7 @@ async function regenerateClient (appkit, args) {
     task.end('error')
     appkit.terminal.print(
       err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to regenerate the Core-Auth OAuth Client Secret\n'
+      'An error occured while attempting to regenerate the Core Auth OAuth Client Secret\n'
     )
   }
 }
