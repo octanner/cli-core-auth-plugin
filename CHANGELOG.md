@@ -1,6 +1,24 @@
 # Changelog
 
-## 1.3.0 / 2019-09-3
+## 2.0.0 / 2019-12-05
+
+- Added Deactivate Client command for deactivating a client and removing it from Akkeris
+  - `deactivate`
+    - `app`, `environment` are required
+- Refactored to use appkit instead for akkeris config
+- Updated responses/tasks
+- Reformatting using standardJS
+
+### DEPRECATIONS
+
+- Removed requiring the **space**, add it to the **app** instead
+  - i.e. Use `-a ccap-core-dev` instead of `-a ccap -s core-dev` 
+- Renamed commands from `core:auth...` -> `coreauth:...`
+  - i.e. Use `coreauth:client:deactivate -a ccap-core-dev` instead of `core:auth:client:deactivate -a ccap-core-dev`
+- Update using the flag `--post_login_url` -> `--postLoginURL`
+- Update using the flag `--post_logout_url` -> `--postLogoutURL`
+
+## 1.3.1 / 2019-09-03
 
 - Updated Create command API route and new command routes
 - Updated commands

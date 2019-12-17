@@ -47,61 +47,35 @@ module.exports =
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
-const sharedArgs = __webpack_require__(354)
 
-async function regenerateClient(appkit, args) {
-  let task = appkit.terminal.task(
-    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}.`
+function regenerateClient (appkit, args) {
+  const task = appkit.terminal.task(
+    `Regenerating Core Auth OAuth Client Secret for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/regenerate', {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.post_login_url,
-      returnto_uris: args.post_logout_url
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/regenerate', {
+    app
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to regenerate the Core Auth OAuth Client Secret\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to regenerate the Core-Auth OAuth Client Secret\n'
-    )
-  }
 }
 
-module.exports = {
-  init(appkit) {
-    appkit.args.command(
-      'core:auth:client:regeneratesecret',
-      'Regenerate your client_secret and update config for the specified app',
-      {
-        app: sharedArgs.app,
-        space: sharedArgs.space,
-        environment: sharedArgs.environment
-      },
-      regenerateClient.bind(null, appkit)
-    )
-  },
-  update() {
-    // do nothing.
-  },
-  group: 'client',
-  help: 'Regenerate your client_secret and update config for the specified app',
-  primary: false
-}
+module.exports = regenerateClient
 
 
 /***/ }),
@@ -1070,6 +1044,57 @@ module.exports = function xhrAdapter(config) {
 
 /***/ }),
 
+/***/ 234:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const buildAxiosWithEnvAndAuth = __webpack_require__(489)
+const { removeConfig } = __webpack_require__(718)
+
+function deactivateClient (appkit, args) {
+  const clientTask = appkit.terminal.task(
+    `Deactivating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
+  )
+  clientTask.start()
+
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const environment = args.environment.toLowerCase()
+
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/deactivate', { app })
+    .then(() => clientTask.end('ok'))
+    .then(() => {
+      const configTask = appkit.terminal.task(
+        `Removing Core Auth Client Credentials Config for ${args.app}-${args.space}`
+      )
+      configTask.start()
+      removeConfig(appkit, app)
+        .then(() => configTask.end('ok'))
+        .catch(err => {
+          configTask.end('error')
+          appkit.terminal.print(
+            err.response && err.response.data.error ? err.response.data.error : err,
+            'An error occured while attempting to remove the Client Credentials Config from Akkeris\n'
+          )
+        })
+    })
+    .catch(err => {
+      clientTask.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to deactivate your Core Auth OAuth Client\n'
+      )
+    })
+}
+
+module.exports = deactivateClient
+
+
+/***/ }),
+
 /***/ 235:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1417,39 +1442,34 @@ module.exports = {
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
 
 async function updateClient (appkit, args) {
-  let task = appkit.terminal.task(
-    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+  const task = appkit.terminal.task(
+    `Updating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const type =
-    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const type = args.type.toUpperCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post(`/coreauth/client/update`, {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.post_login_url,
-      returnto_uris: args.post_logout_url,
-      type: type
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/update', {
+    app: app,
+    redirect_uris: args.postLoginURL,
+    returnto_uris: args.postLogoutURL,
+    type: type
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to update your Core Auth OAuth Client\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to update your Core-Auth OAuth Client\n'
-    )
-  }
 }
 
 module.exports = updateClient
@@ -1775,52 +1795,57 @@ module.exports.default = axios;
 /***/ (function(module) {
 
 const app = {
-    alias: 'a',
-    string: true,
-    demand: true,
-    description: 'An existing app that needs client credentials'
-  },
-  space = {
-    alias: 's',
-    string: true,
-    demand: false,
-    description:
-      "The space which the app belongs to (Production does not allow unsecure 'http' URLs)"
-  },
-  post_login_url = {
-    alias: 'r',
-    string: true,
-    demand: false,
-    description:
+  alias: 'a',
+  string: true,
+  demand: true,
+  description: 'An existing app that needs client credentials'
+}
+
+const space = {
+  alias: 's',
+  string: true,
+  demand: false,
+  description:
+      'The space which the app belongs to'
+}
+
+const postLoginURL = {
+  alias: 'r',
+  string: true,
+  demand: false,
+  description:
       'URL that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
-  },
-  post_logout_url = {
-    alias: 'l',
-    string: true,
-    demand: false,
-    description:
+}
+
+const postLogoutURL = {
+  alias: 'l',
+  string: true,
+  demand: false,
+  description:
       'URL that the client can redirect a user to upon logging out of sessions (Can be passed multiple times)'
-  },
-  type = {
-    alias: 't',
-    string: true,
-    demand: true,
-    description:
+}
+
+const type = {
+  alias: 't',
+  string: true,
+  demand: true,
+  description:
       '[WEB|MOBILE|API] which describes the Type of OAuth Client your app needs'
-  },
-  environment = {
-    alias: 'e',
-    string: true,
-    demand: true,
-    description:
-      '[QA|STG|PRD] describes which Core Auth environment the credentials will be created'
-  }
+}
+
+const environment = {
+  alias: 'e',
+  string: true,
+  demand: true,
+  description:
+      '[STG|PRD] describes which Core Auth environment the credentials will be created'
+}
 
 module.exports = {
   app,
   space,
-  post_login_url,
-  post_logout_url,
+  postLoginURL,
+  postLogoutURL,
   type,
   environment
 }
@@ -1838,7 +1863,7 @@ module.exports = require("assert");
 /***/ 361:
 /***/ (function(module) {
 
-module.exports = {"_args":[["axios@0.19.0","/Users/tyler/workspace/cli-core-auth-plugin"]],"_from":"axios@0.19.0","_id":"axios@0.19.0","_inBundle":false,"_integrity":"sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.19.0","name":"axios","escapedName":"axios","rawSpec":"0.19.0","saveSpec":null,"fetchSpec":"0.19.0"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.0.tgz","_spec":"0.19.0","_where":"/Users/tyler/workspace/cli-core-auth-plugin","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"1.5.10","is-buffer":"^2.0.2"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"homepage":"https://github.com/axios/axios","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test && bundlesize","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","version":"0.19.0"};
+module.exports = {"name":"axios","version":"0.19.0","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test && bundlesize","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://github.com/axios/axios","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"typings":"./index.d.ts","dependencies":{"follow-redirects":"1.5.10","is-buffer":"^2.0.2"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.0.tgz","_integrity":"sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==","_from":"axios@0.19.0"};
 
 /***/ }),
 
@@ -1959,26 +1984,35 @@ module.exports = {
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-const axios = __webpack_require__(53)
+const axios = __webpack_require__(53).default
 const environments = __webpack_require__(447)
 
 const verifyEnv = function (environment) {
+  if (!environment) {
+    throw new Error('environment was not passed')
+  }
+
   var env = environments[environment.toLowerCase()]
   if (!env) {
     throw new Error(`environment ${environment} does not exist`)
   }
+
   return env
 }
 
-const buildAxiosWithEnvAndAuth = function (appkit, environment) {
-  var env = verifyEnv(environment)
+const createAxiosWithAuth = function (env, account) {
   return axios.create({
     baseURL: env.url,
+    timeout: 5000,
     headers: {
-      Authorization: `Bearer ${appkit.account.password}`,
-      'x-username': `${appkit.account.password}`
+      Authorization: `Bearer ${account.password}`,
+      'x-username': `${account.password}`
     }
   })
+}
+
+const buildAxiosWithEnvAndAuth = function (appkit, environment) {
+  return createAxiosWithAuth(verifyEnv(environment), appkit.account)
 }
 
 module.exports = buildAxiosWithEnvAndAuth
@@ -2945,14 +2979,10 @@ module.exports = (
 
 
 const client = __webpack_require__(882)
-const remove = __webpack_require__(718)
-const regenerate = __webpack_require__(17)
 
 module.exports = {
   init: function (appkit) {
     client.init(appkit)
-    remove.init(appkit)
-    regenerate.init(appkit)
   },
   update: () => {
     // What do you want to do once the plugin has been updated,
@@ -2960,72 +2990,63 @@ module.exports = {
     // pulled, so its a "post" update operation.
   },
   group: 'coreauth',
-  help: "Manage your App's Core Auth OAuth Client Credentials",
-  primary: false
+  help: 'Manage your App\'s Core Auth Features',
+  primary: true
 }
 
 
 /***/ }),
 
 /***/ 718:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module) {
 
 "use strict";
 
 
-const buildAxiosWithEnvAndAuth = __webpack_require__(489)
-const sharedArgs = __webpack_require__(354)
+function filterConfig (config) {
+  return Object.keys(config)
+    .filter((key) => key.startsWith('CORE_AUTH_'))
+    .reduce((res, key) => ((res[key] = null), res), {}) // eslint-disable-line no-sequences
+}
 
-async function removeClient(appkit, args) {
-  let task = appkit.terminal.task(
-    `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+async function removeConfig (appkit, app) {
+  appkit.api.get(`/apps/${app}/config-vars`)
+    .then(appConfig => {
+      if (!Object.keys(appConfig).length) throw new Error(app + ' does not have any configuration to remove\n')
+
+      return filterConfig(appConfig)
+    })
+    .then(config => appkit.api.patch(JSON.stringify(config), `/apps/${app}/config-vars`))
+}
+
+function removeClient (appkit, args) {
+  const task = appkit.terminal.task(
+    `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/remove', {
-      app: app,
-      ...(space ? { space: space } : {})
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  return removeConfig(appkit, app)
+    .then(() => task.end('ok'))
+    .catch(err => {
+      console.error(err)
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to remove your Core Auth OAuth Client from Akkeris\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to remove your Core-Auth OAuth Client\n'
-    )
-  }
 }
 
 module.exports = {
-  init(appkit) {
-    appkit.args.command(
-      'core:auth:client:remove',
-      'Removes your client credentials from the config for the specified app',
-      {
-        app: sharedArgs.app,
-        space: sharedArgs.space,
-        environment: sharedArgs.environment
-      },
-      removeClient.bind(null, appkit)
-    )
-  },
-  update() {
-    // do nothing.
-  },
-  group: 'client',
-  help: 'Removes your client credentials from the config for the specified app',
-  primary: false
+  removeConfig,
+  filterConfig,
+  remove: removeClient
 }
 
 
@@ -3432,40 +3453,35 @@ module.exports = require("url");
 
 const buildAxiosWithEnvAndAuth = __webpack_require__(489)
 
-async function createClient (appkit, args) {
-  let task = appkit.terminal.task(
-    `Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}.`
+function createClient (appkit, args) {
+  const task = appkit.terminal.task(
+    `Creating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
   )
   task.start()
 
-  const app = typeof args.app === 'string' ? args.app.toLowerCase() : args.app
-  const space =
-    typeof args.space === 'string' ? args.space.toLowerCase() : args.space
-  const type =
-    typeof args.type === 'string' ? args.type.toUpperCase() : args.type
-  const environment =
-    typeof args.environment === 'string'
-      ? args.environment.toLowerCase()
-      : args.environment
+  let app = args.app.toLowerCase()
+  const space = args.space && args.space.toLowerCase()
+  const type = args.type.toUpperCase()
+  const environment = args.environment.toLowerCase()
 
-  try {
-    const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
-    await authAxios.post('/coreauth/client/create', {
-      app: app,
-      ...(space ? { space: space } : {}),
-      redirect_uris: args.post_login_url,
-      returnto_uris: args.post_logout_url,
-      type: type
+  /** Backwards compatability */
+  if (space) app = app.includes(space) ? app : app + space
+
+  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  authAxios.post('/coreauth/client/create', {
+    app: app,
+    redirect_uris: args.postLoginURL,
+    returnto_uris: args.postLogoutURL,
+    type: type
+  })
+    .then(() => task.end('ok'))
+    .catch(err => {
+      task.end('error')
+      appkit.terminal.print(
+        err.response && err.response.data.error ? err.response.data.error : err,
+        'An error occured while attempting to create a new Core Auth OAuth Client\n'
+      )
     })
-
-    task.end('ok')
-  } catch (err) {
-    task.end('error')
-    appkit.terminal.print(
-      err.response && err.response.data.error ? err.response.data.error : err,
-      'An error occured while attempting to create a Core-Auth OAuth Client\n'
-    )
-  }
 }
 
 module.exports = createClient
@@ -3582,32 +3598,64 @@ module.exports = function spread(callback) {
 "use strict";
 
 
-const createClient = __webpack_require__(838)
-const updateClient = __webpack_require__(258)
+const create = __webpack_require__(838)
+const update = __webpack_require__(258)
+const deactivate = __webpack_require__(234)
+const { remove } = __webpack_require__(718)
+const regenerate = __webpack_require__(17)
 const sharedArgs = __webpack_require__(354)
 
 module.exports = {
-  init(appkit) {
+  init (appkit) {
     appkit.args
       .command(
-        'core:auth:client:create',
+        'coreauth:client:create',
         'Create client credentials and assign them to the specified app',
         sharedArgs,
-        createClient.bind(null, appkit)
+        create.bind(null, appkit)
       )
       .command(
-        'core:auth:client:update',
+        'coreauth:client:deactivate',
+        'Deactivate client credentials and removes the config from the specified app',
+        {
+          app: sharedArgs.app,
+          space: sharedArgs.space,
+          environment: sharedArgs.environment
+        },
+        deactivate.bind(null, appkit)
+      )
+      .command(
+        'coreauth:client:regenerate',
+        'Regenerate your client_secret and update config for the specified app',
+        {
+          app: sharedArgs.app,
+          space: sharedArgs.space,
+          environment: sharedArgs.environment
+        },
+        regenerate.bind(null, appkit)
+      )
+      .command(
+        'coreauth:client:remove',
+        'Removes your client credentials from the config for the specified app',
+        {
+          app: sharedArgs.app,
+          space: sharedArgs.space
+        },
+        remove.bind(null, appkit)
+      )
+      .command(
+        'coreauth:client:update',
         'Update client credentials and config for the specified app',
         sharedArgs,
-        updateClient.bind(null, appkit)
+        update.bind(null, appkit)
       )
   },
-  update() {
+  update () {
     // do nothing.
   },
   group: 'client',
-  help: "Manage your App's Core Auth Client Credentials and Configuration",
-  primary: true
+  help: 'Manage your App\'s Core Auth Client Credentials and Configuration',
+  primary: false
 }
 
 
