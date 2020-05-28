@@ -10,12 +10,14 @@
 
 ### New Features
 
-  - Added OAuth Client Scope management commands
+  - Added `scope` commands for listening, finding, and searching available OAuth Scope(s)
     - `coreauth:scope:list` - List all active and available Scope(s) and their Feature Code
     - `coreauth:scope:find` - Find all active Scope(s) with a Customer Feature Code
     - `coreauth:scope:search` - Searches and returns the specified Scope(s) and their Feature Code
-    - `coreauth:scope:add` - Add Scope(s) to your App's OAuth Client
-    - `coreauth:scope:remove` - Remove Scope(s) to your App's OAuth Client
+  - Added two additional `client` commands for managing an OAuth Client's Scope
+    - `coreauth:client:add-scope` - Add Scope(s) to your App's OAuth Client
+    - `coreauth:client:remove-scope` - Remove Scope(s) to your App's OAuth Client
+  - Added `version` command for debugging
   - Added soft_error/warning messages to let users know they may be over-writing their config
   
 ### Internal/Docs
