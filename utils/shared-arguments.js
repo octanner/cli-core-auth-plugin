@@ -1,55 +1,42 @@
-const app = {
-  alias: 'a',
-  string: true,
-  demand: true,
-  description: 'An existing app that needs client credentials'
-}
-
-const space = {
-  alias: 's',
-  string: true,
-  demand: false,
-  description:
-      'The space which the app belongs to'
-}
-
-const postLoginURL = {
-  alias: 'r',
-  string: true,
-  demand: false,
-  description:
-      'URL that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
-}
-
-const postLogoutURL = {
-  alias: 'l',
-  string: true,
-  demand: false,
-  description:
-      'URL that the client can redirect a user to upon logging out of sessions (Can be passed multiple times)'
-}
-
-const type = {
-  alias: 't',
-  string: true,
-  demand: true,
-  description:
-      '[WEB|MOBILE|API] which describes the Type of OAuth Client your app needs'
-}
-
-const environment = {
-  alias: 'e',
-  string: true,
-  demand: true,
-  description:
-      '[STG|PRD] describes which Core Auth environment the credentials will be created'
-}
+'use strict'
 
 module.exports = {
-  app,
-  space,
-  postLoginURL,
-  postLogoutURL,
-  type,
-  environment
+  app: {
+    alias: 'a',
+    string: true,
+    demand: true,
+    description: 'An existing akkeris app that can securely store the OAuth Client credentials'
+  },
+
+  postLoginURL: {
+    alias: 'r',
+    string: true,
+    demand: false,
+    description:
+        'redirect_uri - endpoint that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
+  },
+
+  postLogoutURL: {
+    alias: 'l',
+    string: true,
+    demand: false,
+    description:
+        'returnto_uri - endpoint that your app will be listening on for a user to return to after logging out to log back in (Can be passed multiple times)'
+  },
+
+  type: {
+    alias: 't',
+    string: true,
+    demand: true,
+    description:
+        'Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+  },
+
+  environment: {
+    alias: 'e',
+    string: true,
+    demand: true,
+    description:
+        'Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
+  }
 }

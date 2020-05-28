@@ -3,12 +3,12 @@ const environments = require('./environments')
 
 const verifyEnv = function (environment) {
   if (!environment) {
-    throw new Error('environment was not passed')
+    throw new Error('The Environment was not passed')
   }
 
   var env = environments[environment.toLowerCase()]
   if (!env) {
-    throw new Error(`environment ${environment} does not exist`)
+    throw new Error(`The Environment passed: ${environment} does not exist`)
   }
 
   return env
@@ -25,8 +25,8 @@ const createAxiosWithAuth = function (env, account) {
   })
 }
 
-const buildAxiosWithEnvAndAuth = function (appkit, environment) {
-  return createAxiosWithAuth(verifyEnv(environment), appkit.account)
+const buildAxiosWithEnvAndAuth = function (akkeris, environment) {
+  return createAxiosWithAuth(verifyEnv(environment), akkeris.account)
 }
 
 module.exports = buildAxiosWithEnvAndAuth

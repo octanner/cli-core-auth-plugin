@@ -9,7 +9,7 @@ function filterConfig (config) {
 async function removeConfig (appkit, app) {
   appkit.api.get(`/apps/${app}/config-vars`)
     .then(appConfig => {
-      if (!Object.keys(appConfig).length) throw new Error(app + ' does not have any configuration to remove\n')
+      if (!Object.keys(appConfig).length) throw new Error(app + ' does not have any configuration to remove')
 
       return filterConfig(appConfig)
     })
@@ -18,7 +18,7 @@ async function removeConfig (appkit, app) {
 
 function removeClient (appkit, args) {
   const task = appkit.terminal.task(
-    `Removing Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
+    `Removing OAuth Client configuration from ${args.app}`
   )
   task.start()
 
@@ -35,7 +35,7 @@ function removeClient (appkit, args) {
       task.end('error')
       appkit.terminal.print(
         err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to remove your Core Auth OAuth Client from Akkeris\n'
+        'An error occured while attempting to remove your Core Auth Configuration from Akkeris'
       )
     })
 }

@@ -8,54 +8,49 @@ const regenerate = require('./client/regenerate')
 const sharedArgs = require('../utils/shared-arguments')
 
 module.exports = {
-  init (appkit) {
-    appkit.args
+  init: akkeris => {
+    akkeris.args
       .command(
         'coreauth:client:create',
-        'Create client credentials and assign them to the specified app',
+        'Create OAuth2 Client credentials and assign them to the specified app',
         sharedArgs,
-        create.bind(null, appkit)
+        create.bind(null, akkeris)
       )
       .command(
         'coreauth:client:deactivate',
-        'Deactivate client credentials and removes the config from the specified app',
+        'Deactivate the OAuth Client and remove the config from the specified app',
         {
           app: sharedArgs.app,
-          space: sharedArgs.space,
           environment: sharedArgs.environment
         },
-        deactivate.bind(null, appkit)
+        deactivate.bind(null, akkeris)
       )
       .command(
         'coreauth:client:regenerate',
-        'Regenerate your client_secret and update config for the specified app',
+        'Regenerate the OAuth Client\'s \'client_secret\' and update the config for the specified app',
         {
           app: sharedArgs.app,
-          space: sharedArgs.space,
           environment: sharedArgs.environment
         },
-        regenerate.bind(null, appkit)
+        regenerate.bind(null, akkeris)
       )
       .command(
         'coreauth:client:remove',
-        'Removes your client credentials from the config for the specified app',
+        'Remove the OAuth Client configuration variables from the specified app (Does not deactivate OAuth Client)',
         {
           app: sharedArgs.app,
-          space: sharedArgs.space
         },
-        remove.bind(null, appkit)
+        remove.bind(null, akkeris)
       )
       .command(
         'coreauth:client:update',
-        'Update client credentials and config for the specified app',
+        'Update the OAuth Client and add/update the config for the specified app',
         sharedArgs,
-        update.bind(null, appkit)
+        update.bind(null, akkeris)
       )
   },
-  update () {
-    // do nothing.
-  },
-  group: 'client',
-  help: 'Manage your App\'s Core Auth Client Credentials and Configuration',
+  update: () => {},
+  group: 'coreauth',
+  help: 'Manage your App\'s OAuth Client credentials while keeping the configuration in sync with Core Auth',
   primary: false
 }

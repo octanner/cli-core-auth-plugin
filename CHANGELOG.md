@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+- Added soft_error/warning messages to let users know they may be over-writing their config
+- Updated help messages removing 'Core Auth' and sticking to just 'OAuth Client'
+  - Core Auth may be more than just OAuth--this should help with future ambiguity
+    - Core Auth OAuth Client sounds funny. Maybe 'Core OAuth Client'?
+- Removed `space` option. Everyone has moved away from using it and keeping it has caused confusion
+- Updated package.json
+  - Added private to prevent NPM publish
+  - Added authors & maintainers
+  - Updated packages
+  - Removed license
+
 ## 2.0.0 / 2019-12-05
 
 - Added Deactivate Client command for deactivating a client and removing it from Akkeris
