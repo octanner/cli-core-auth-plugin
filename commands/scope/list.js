@@ -2,16 +2,12 @@
 
 const axios = require('../../utils/auth-axios')
 
-module.exports = (akkeris, args) {
+module.exports = (akkeris, args) => {
   try {
-    const app = args.app.toLowerCase()
-    const scope = Array.isArray(args.scope) ? args.scope : [args.scope]
-    scope.map(s => s.toLowerCase())
-    const scopeString = scope.split(', ')
     const environment = args.environment.toLowerCase()
     const authAxios = axios(akkeris, environment)
 
-    const task = akkeris.terminal.task(`Getting list of all currently active Scope(s)`)
+    const task = akkeris.terminal.task('Getting list of all currently active Scope(s)')
     task.start()
 
     return authAxios.post('/coreauth/scope/list', {})
@@ -20,7 +16,7 @@ module.exports = (akkeris, args) {
 
         const scopeTable = ['| Scope Name | Feature Code | Created On | Modified On |']
         scopeTable.push('| ---------- |:------------:| ------------:| ------------ :|')
-        
+
         // TODO: Sort scopes by scopeName or better yet, add option to sort
         scopes.forEach(scope => {
           scopeTable.push(`| ${scope.scopeName} | ${scope.featureCode} | ${scope.createdOn} | ${scope.modifiedOn} |`)

@@ -6,7 +6,7 @@ function regenerateClient (appkit, args) {
   )
   task.start()
 
-  let app = args.app.toLowerCase()
+  const app = args.app.toLowerCase()
   const environment = args.environment.toLowerCase()
 
   const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)

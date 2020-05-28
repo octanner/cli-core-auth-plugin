@@ -24,6 +24,22 @@ module.exports = {
         'returnto_uri - endpoint that your app will be listening on for a user to return to after logging out to log back in (Can be passed multiple times)'
   },
 
+  scope: {
+    alias: 's',
+    string: true,
+    demand: false,
+    description:
+        'Scope that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
+  },
+
+  featureCode: {
+    alias: 'f',
+    string: true,
+    demand: false,
+    description:
+        'Feature Code to search and returns Scope(s) for'
+  },
+
   type: {
     alias: 't',
     string: true,

@@ -7,7 +7,7 @@ function deactivateClient (appkit, args) {
   )
   clientTask.start()
 
-  let app = args.app.toLowerCase()
+  const app = args.app.toLowerCase()
   const environment = args.environment.toLowerCase()
 
   const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)

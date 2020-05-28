@@ -6,7 +6,7 @@ async function updateClient (appkit, args) {
   )
   task.start()
 
-  let app = args.app.toLowerCase()
+  const app = args.app.toLowerCase()
   const type = args.type.toUpperCase()
   const environment = args.environment.toLowerCase()
 

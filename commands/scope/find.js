@@ -2,10 +2,10 @@
 
 const axios = require('../../utils/auth-axios')
 
-module.exports = (akkeris, args) {
+module.exports = (akkeris, args) => {
   try {
     const app = args.app.toLowerCase()
-    const scope = args.featureCode.toLowerCase()
+    const featureCode = args.featureCode.toLowerCase()
     const environment = args.environment.toLowerCase()
     const authAxios = axios(akkeris, environment)
 
@@ -18,7 +18,7 @@ module.exports = (akkeris, args) {
         const scopeTable = ['| Scope Name | Feature Code | Created On | Modified On |']
         scopeTable.push('| ---------- |:------------:| ------------:| ------------ :|')
 
-        scopes.forEach(scope =>{
+        scopes.forEach(scope => {
           scopeTable.push(`| ${scope.scopeName} | ${scope.featureCode} | ${scope.createdOn} | ${scope.modifiedOn} |`)
         })
 

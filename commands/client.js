@@ -38,7 +38,7 @@ module.exports = {
         'coreauth:client:remove',
         'Remove the OAuth Client configuration variables from the specified app (Does not deactivate OAuth Client)',
         {
-          app: sharedArgs.app,
+          app: sharedArgs.app
         },
         remove.bind(null, akkeris)
       )

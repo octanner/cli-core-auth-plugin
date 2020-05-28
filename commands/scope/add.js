@@ -2,7 +2,7 @@
 
 const axios = require('../../utils/auth-axios')
 
-module.exports = (akkeris, args) {
+module.exports = (akkeris, args) => {
   try {
     const app = args.app.toLowerCase()
     const scope = Array.isArray(args.scope) ? args.scope : [args.scope]
