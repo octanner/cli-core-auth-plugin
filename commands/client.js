@@ -5,6 +5,8 @@ const update = require('./client/update')
 const deactivate = require('./client/deactivate')
 const { remove } = require('./client/remove')
 const regenerate = require('./client/regenerate')
+const addScope = require('./client/addScope')
+const removeScope = require('./client/removeScope')
 const sharedArgs = require('../utils/shared-arguments')
 
 module.exports = {
@@ -47,6 +49,26 @@ module.exports = {
         'Update the OAuth Client and add/update the config for the specified app',
         sharedArgs,
         update.bind(null, akkeris)
+      )
+      .command(
+        'coreauth:client:add-scope',
+        'Add Scope(s) to your OAuth Client',
+        {
+          app: sharedArgs.app,
+          scope: sharedArgs.scope,
+          environment: sharedArgs.environment
+        },
+        addScope.bind(null, akkeris)
+      )
+      .command(
+        'coreauth:client:remove-scope',
+        'Remove Scope(s) from your OAuth Client',
+        {
+          app: sharedArgs.app,
+          scope: sharedArgs.scope,
+          environment: sharedArgs.environment
+        },
+        removeScope.bind(null, akkeris)
       )
   },
   update: () => {},
