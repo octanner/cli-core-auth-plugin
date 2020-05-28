@@ -51,6 +51,6 @@ module.exports = {
   },
   update: () => {},
   group: 'coreauth',
-  help: 'Create or manage your App\'s OAuth Client & configuration with Core Auth',
+  help: 'Manage OAuth Clients using Core Auth',
   primary: false
 }
