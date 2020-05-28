@@ -25,8 +25,4 @@ const createAxiosWithAuth = function (env, account) {
   })
 }
 
-const buildAxiosWithEnvAndAuth = function (akkeris, environment) {
-  return createAxiosWithAuth(verifyEnv(environment), akkeris.account)
-}
-
-module.exports = buildAxiosWithEnvAndAuth
+module.exports = (akkeris, environment) => createAxiosWithAuth(verifyEnv(environment), akkeris.account)
