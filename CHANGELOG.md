@@ -2,16 +2,32 @@
 
 ## Unreleased
 
-- Added soft_error/warning messages to let users know they may be over-writing their config
-- Updated help messages removing 'Core Auth' and sticking to just 'OAuth Client'
+### Breaking Changes
+
+  - Removed `space` option
+    - Everyone has moved away from using it and keeping it has caused confusion
+    - `-s` is now used for `Scope`
+
+### New Features
+
+  - Added OAuth Client Scope management commands
+    - `coreauth:scope:list` - List all active and available Scope(s) and their Feature Code
+    - `coreauth:scope:find` - Find all active Scope(s) with a Customer Feature Code
+    - `coreauth:scope:search` - Searches and returns the specified Scope(s) and their Feature Code
+    - `coreauth:scope:add` - Add Scope(s) to your App's OAuth Client
+    - `coreauth:scope:remove` - Remove Scope(s) to your App's OAuth Client
+  - Added soft_error/warning messages to let users know they may be over-writing their config
+  
+### Internal/Docs
+  
+  - Updated help messages removing 'Core Auth' and sticking to just 'OAuth Client'
   - Core Auth may be more than just OAuth--this should help with future ambiguity
     - Core Auth OAuth Client sounds funny. Maybe 'Core OAuth Client'?
-- Removed `space` option. Everyone has moved away from using it and keeping it has caused confusion
-- Updated package.json
-  - Added private to prevent NPM publish
-  - Added authors & maintainers
-  - Updated packages
-  - Removed license
+  - Updated package.json
+    - Added private to prevent NPM publish
+    - Added authors & maintainers
+    - Updated packages
+    - Removed license
 
 ## 2.0.0 / 2019-12-05
 
