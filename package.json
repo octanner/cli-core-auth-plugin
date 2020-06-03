@@ -2,7 +2,7 @@
   "name": "cli-core-auth-akkeris-plugin",
   "description": "Akkeris CLI plugin for Apps to create and add OAuth Client credentials",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://github.com/octanner/cli-core-auth-plugin",
   "repository": {
     "type": "git",
