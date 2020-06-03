@@ -103,3 +103,11 @@ Then run:
 ```zsh
 npm version {major|minor|patch}
 ```
+
+### Linting & Formatting
+
+Please run the following command to lint & format the code to StandardJS
+
+```zsh
+npm run lint
+```
