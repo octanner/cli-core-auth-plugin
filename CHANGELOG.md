@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1 / 2020-06-03
+
+- Updated package dependencies to latest
+- Moved development linter from `prettier-standard` -> `standardJS`
+
 ## 2.0.0 / 2019-12-05
 
 - Added Deactivate Client command for deactivating a client and removing it from Akkeris
