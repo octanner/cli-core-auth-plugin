@@ -1,13 +1,13 @@
 {
   "name": "cli-core-auth-akkeris-plugin",
   "description": "Akkeris CLI plugin for Apps to create and manage their OAuth Client with Core Auth",
+  "private": true,
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Jan Taylor <jan.taylor@octanner.com>",
   "maintainers": [
     "Tyler Evans <tyler.evans-ct@octanner.com>"
   ],
-  "private": true,
   "homepage": "https://github.com/octanner/cli-core-auth-plugin",
   "repository": {
     "type": "git",
