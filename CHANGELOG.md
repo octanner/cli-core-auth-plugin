@@ -4,27 +4,58 @@
 
 ### Breaking Changes
 
-  - Removed `space` option
-    - Everyone has moved away from using it and keeping it has caused confusion
-    - `-s` is now used for `Scope`
+**- Removed GitFlow and thus made `master` the default branch**
+  - If you have issues or errors upon updating, please try the following:
+    ```zsh
+    aka plugins:uninstall coreauth && \
+    aka plugins:install coreauth
+    ```
+  - If that doesn't work, you may have to just switch the git branch:
+    ```zsh
+    cd ~/.akkeris/plugins/coreauth && \
+    git checkout master
+    ```
+**- Removed `-s --space` option**
+  - Everyone has moved away from using it and keeping it has caused confusion
+  - `-s` is now used for `--scope`
+**- Removed the `ncc` library which may require plugin reinstall**
+  - [ncc](https://github.com/vercel/ncc) is a simple CLI for compiling a Node.js module into a single file, together with all its dependencies, gcc-style.
+  - Required a build every commit to `master` to execute the latest code
+  - Found it wasn't necessary and the `npm i` that `akkeris` runs is fine for our application.
 
 ### New Features
 
-  - Added `scope` commands for listening, finding, and searching available OAuth Scope(s)
-    - `coreauth:scope:list` - List all active and available Scope(s) and their Feature Code
-    - `coreauth:scope:find` - Find all active Scope(s) with a Customer Feature Code
-    - `coreauth:scope:search` - Searches and returns the specified Scope(s) and their Feature Code
-  - Added two additional `client` commands for managing an OAuth Client's Scope
-    - `coreauth:client:add-scope` - Add Scope(s) to your App's OAuth Client
-    - `coreauth:client:remove-scope` - Remove Scope(s) to your App's OAuth Client
-  - Added `version` command for debugging
-  - Added soft_error/warning messages to let users know they may be over-writing their config
-  
+- Added `scope` commands for listing, finding, and searching available OAuth Scope(s) by several methods:
+  - `coreauth:scope:list` - List all active and available Scope(s) and their Feature Code
+    - Takes arguments:
+      - `-e` or `--environment`
+    - This is limited to the first 100 scopes, currently there's not many scopes. I'll improve this on the next iteration.
+  - `coreauth:scope:list-by-feature-code` - List all active Scope(s) from a specified Feature Code
+    - Takes arguments:
+      - `-f` or `--featureCode`
+      - `-e` or `--environment`
+  - `coreauth:scope:search` - Searches for a Scope by it's name. (i.e. "identity")
+    - Takes arguments:
+      - `-s` or `--scope`
+      - `-e` or `--environment`
+- Added two additional `client` commands for managing an OAuth Client's Scope
+  - `coreauth:client:add-scope` - Add Scope(s) to your App's OAuth Client
+    - Takes arguments:
+      - `-a` or `--app`
+      - `-s` or `--featureCode`
+      - `-e` or `--environment`
+  - `coreauth:client:remove-scope` - Remove Scope(s) to your App's OAuth Client
+    - Takes arguments:
+      - `-a` or `--app`
+      - `-s` or `--featureCode`
+      - `-e` or `--environment`
+- Added `coreauth:version` command for easier debugging
+
 ### Internal/Docs
   
-  - Updated help messages removing 'Core Auth' and sticking to just 'OAuth Client'
-  - Core Auth may be more than just OAuth--this should help with future ambiguity
-    - Core Auth OAuth Client sounds funny. Maybe 'Core OAuth Client'?
+  - Updated help messages removing 'Core Auth' and using 'OAuth Client' instead
+    - Core Auth may be more than just OAuth--this should help with future ambiguity
+    - Core Auth OAuth Client sounds funny. _Maybe **'Core OAuth Client'**?_
   - Updated package.json
     - Added private to prevent NPM publish
     - Added authors & maintainers
