@@ -5,7 +5,7 @@ module.exports = {
     alias: 'a',
     string: true,
     demand: true,
-    description: 'An existing akkeris app that can securely store the OAuth Client credentials'
+    description: 'app - An existing akkeris app that can securely store the OAuth Client credentials'
   },
 
   postLoginURL: {
@@ -29,7 +29,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'Scope that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
+        'scope - that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
   },
 
   featureCode: {
@@ -37,7 +37,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'Feature Code to search and returns Scope(s) for'
+        'feature_code - The feature code is used to search and returns scope(s) belonging to it'
   },
 
   type: {
@@ -45,7 +45,7 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+        'type - Choose one: [WEB|MOBILE|API|INTROSPECTION]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
   },
 
   environment: {
@@ -53,6 +53,6 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
+        'environment - Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
   }
 }

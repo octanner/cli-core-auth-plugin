@@ -9,20 +9,16 @@ module.exports = (akkeris, args) => {
   const environment = args.environment.toLowerCase()
   const authAxios = axios(akkeris, environment)
 
-  const task = akkeris.terminal.task(`Removing the following Scope(s) from ${args.app}: ${scope.split(', ')}`)
+  const task = akkeris.terminal.task(`Removing the following Scope(s) from ${args.app}: ${scope.join(', ')}`)
   task.start()
 
-  return authAxios.post('/coreauth/scope/remove', { app, scope })
+  return authAxios.post('/coreauth/client/removeScope', { app, scope })
     .then(scope => {
       task.end('ok')
-      akkeris.terminal.message('Successfully removed Scope(s) from the OAuth Client')
-      akkeris.terminal.message('Current Scope(s) on this OAuth Client: ', scope.split(', '))
     })
     .catch(err => {
       task.end('error')
-      akkeris.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to remove Scope(s) from the OAuth Client'
-      )
+      akkeris.terminal.error('An error occured while attempting to remove Scope(s) from the OAuth Client')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }

@@ -3,31 +3,29 @@
 const axios = require('../../utils/auth-axios')
 
 module.exports = (akkeris, args) => {
-  const app = args.app.toLowerCase()
-  const scope = Array.isArray(args.scope) ? args.scope : [args.scope]
-  scope.map(s => s.toLowerCase())
+  const scope = Array.isArray(args.scope) ? args.scope[0] : args.scope
   const environment = args.environment.toLowerCase()
   const authAxios = axios(akkeris, environment)
 
   const task = akkeris.terminal.task(`Searching for the following Scope(s): ${scope.split(', ')}`)
   task.start()
 
-  return authAxios.post('/coreauth/scope/search', { app, scope })
-    .then(scopes => {
+  return authAxios.post('/coreauth/scope/findByName', { scopeName: scope })
+    .then(({ data: scope = {} }) => {
+      const scopeTable = []
+      // TODO: Sort scopes by scopeName or better yet, add option to sort
+      scopeTable.push({ scopeName: scope.scopeName, featurecode: scope.featureCode, createdOn: scope.createdOn, modifiedOn: scope.modifiedOn })
+
       task.end('ok')
 
-      const scopeTable = ['| Scope Name | Feature Code | Created On | Modified On |']
-      scopeTable.push('| ---------- |:------------:| ------------:| ------------ :|')
-
-      scopes.forEach(scope => {
-        scopeTable.push(`| ${scope.scopeName} | ${scope.featureCode} | ${scope.createdOn} | ${scope.modifiedOn} |`)
-      })
+      return scopeTable
+    })
+    .then(scopeTable => {
+      akkeris.terminal.table(scopeTable)
     })
     .catch(err => {
       task.end('error')
-      akkeris.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to search for the specified Scope(s)'
-      )
+      akkeris.terminal.error('An error occured while attempting to search for the specified Scope(s)')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }

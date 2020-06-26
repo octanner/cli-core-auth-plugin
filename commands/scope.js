@@ -17,8 +17,8 @@ module.exports = {
         listScope.bind(null, akkeris)
       )
       .command(
-        'coreauth:scope:find',
-        'Finds and returns all active Scope(s) that belong to the specified Customer Feature Code',
+        'coreauth:scope:list-by-feature-code',
+        'Lists all scope(s) available by feature code',
         {
           featureCode: sharedArgs.featureCode,
           environment: sharedArgs.environment
@@ -27,7 +27,7 @@ module.exports = {
       )
       .command(
         'coreauth:scope:search',
-        'Search for Scope(s) and return their details',
+        'Search for a scope by name',
         {
           scope: sharedArgs.scope,
           environment: sharedArgs.environment

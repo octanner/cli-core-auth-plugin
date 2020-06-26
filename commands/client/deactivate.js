@@ -1,39 +1,35 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 const { removeConfig } = require('./remove')
 
-function deactivateClient (appkit, args) {
-  const clientTask = appkit.terminal.task(
+function deactivateClient (akkeris, args) {
+  const task = akkeris.terminal.task(
     `Deactivating OAuth Client for ${args.app}`
   )
-  clientTask.start()
+  task.start()
 
   const app = args.app.toLowerCase()
   const environment = args.environment.toLowerCase()
 
-  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  const authAxios = buildAxiosWithEnvAndAuth(akkeris, environment)
   return authAxios.post('/coreauth/client/deactivate', { app })
-    .then(() => clientTask.end('ok'))
+    .then(() => task.end('ok'))
     .then(() => {
-      const configTask = appkit.terminal.task(
+      const configTask = akkeris.terminal.task(
         `Removing OAuth Client config from ${args.app}`
       )
       configTask.start()
-      return removeConfig(appkit, app)
+      return removeConfig(akkeris, app)
         .then(() => configTask.end('ok'))
         .catch(err => {
-          configTask.end('error')
-          appkit.terminal.print(
-            err.response && err.response.data.error ? err.response.data.error : err,
-            'An error occured while attempting to remove the config from Akkeris'
-          )
+          task.end('error')
+          akkeris.terminal.error('An error occured while attempting to remove the config from Akkeris')
+          akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
         })
     })
     .catch(err => {
-      clientTask.end('error')
-      appkit.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to deactivate your OAuth Client'
-      )
+      task.end('error')
+      akkeris.terminal.error('An error occured while attempting to deactivate your OAuth Client')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }
 

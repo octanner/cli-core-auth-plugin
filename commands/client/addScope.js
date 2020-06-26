@@ -9,20 +9,16 @@ module.exports = (akkeris, args) => {
   const environment = args.environment.toLowerCase()
   const authAxios = axios(akkeris, environment)
 
-  const task = akkeris.terminal.task(`Adding the following Scope(s) to ${args.app}: ${scope.split(', ')}`)
+  const task = akkeris.terminal.task(`Adding the following Scope(s) to ${args.app}: ${scope.join(', ')}`)
   task.start()
 
-  return authAxios.post('/coreauth/scope/add', { app, scope })
+  return authAxios.post('/coreauth/client/addScope', { app, scope })
     .then(scope => {
       task.end('ok')
-      akkeris.terminal.message('Successfully added Scope(s) to the OAuth Client')
-      akkeris.terminal.message('Current Scope(s) on this OAuth Client: ', scope.split(', '))
     })
     .catch(err => {
       task.end('error')
-      akkeris.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to add Scope(s) to the OAuth Client'
-      )
+      akkeris.terminal.error('An error occured while attempting to add Scope(s) to the OAuth Client')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }

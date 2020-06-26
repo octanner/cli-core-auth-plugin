@@ -29,6 +29,15 @@ module.exports = {
       )
       .command(
         'coreauth:client:regenerate',
+        'Deprecated: See \'coreauth:client:regenerate-secret\'',
+        {
+          app: sharedArgs.app,
+          environment: sharedArgs.environment
+        },
+        regenerate.bind(null, akkeris)
+      )
+      .command(
+        'coreauth:client:regenerate-secret',
         'Regenerate the OAuth Client\'s \'client_secret\' and update the config for the specified app',
         {
           app: sharedArgs.app,

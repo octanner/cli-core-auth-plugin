@@ -6,18 +6,18 @@ function filterConfig (config) {
     .reduce((res, key) => ((res[key] = null), res), {}) // eslint-disable-line no-sequences
 }
 
-async function removeConfig (appkit, app) {
-  appkit.api.get(`/apps/${app}/config-vars`)
+async function removeConfig (akkeris, app) {
+  akkeris.api.get(`/apps/${app}/config-vars`)
     .then(appConfig => {
       if (!Object.keys(appConfig).length) throw new Error(app + ' does not have any configuration to remove')
 
       return filterConfig(appConfig)
     })
-    .then(config => appkit.api.patch(JSON.stringify(config), `/apps/${app}/config-vars`))
+    .then(config => akkeris.api.patch(JSON.stringify(config), `/apps/${app}/config-vars`))
 }
 
-function removeClient (appkit, args) {
-  const task = appkit.terminal.task(
+function removeClient (akkeris, args) {
+  const task = akkeris.terminal.task(
     `Removing OAuth Client configuration from ${args.app}`
   )
   task.start()
@@ -28,15 +28,12 @@ function removeClient (appkit, args) {
   /** Backwards compatability */
   if (space) app = app.includes(space) ? app : app + space
 
-  return removeConfig(appkit, app)
+  return removeConfig(akkeris, app)
     .then(() => task.end('ok'))
     .catch(err => {
-      console.error(err)
       task.end('error')
-      appkit.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to remove your Core Auth Configuration from Akkeris'
-      )
+      akkeris.terminal.error('An error occured while attempting to remove your Core Auth Configuration from Akkeris')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }
 
