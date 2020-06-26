@@ -50,6 +50,7 @@
       - `-s` or `--featureCode`
       - `-e` or `--environment`
 - Added `coreauth:version` command for easier debugging
+- Added warning **NOTE** message to let users know they may be regenerating their client_secret if it's missing from the config
 
 ### Internal/Docs
   

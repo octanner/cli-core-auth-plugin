@@ -1,7 +1,7 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 function createClient (akkeris, args) {
-  akkeris.terminal.print('Note: If your app has any config missing, this command may regenerate the client_secret.')
+  akkeris.terminal.print('Note: If your app is missing the client_secret configuration, this command will regenerate the client_secret and update the configuration in Akkeris.')
   const task = akkeris.terminal.task(`Creating OAuth Client for ${args.app}`)
   task.start()
 

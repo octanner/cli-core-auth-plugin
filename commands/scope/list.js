@@ -25,9 +25,6 @@ module.exports = (akkeris, args) => {
 
       task.end('ok')
 
-      return scopeTable
-    })
-    .then(scopeTable => {
       akkeris.terminal.table(scopeTable)
     })
     .catch(err => {
