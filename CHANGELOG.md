@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 3.0.1 / 2020-07-07
+
+### Internal/Docs
+
+- Added `install.js` per Akkeris team instructions
+- Fixed changelog version number `v1.2.0` -> `v1.3.0`
+
+## 3.0.0 / 2020-07-07
 
 ### Breaking Changes
 
@@ -13,7 +20,8 @@
   - If that doesn't work, you may have to just switch the git branch:
     ```zsh
     cd ~/.akkeris/plugins/coreauth && \
-    git checkout master
+    git checkout master && \
+    aka update
     ```
 **- Removed `-s --space` option**
   - Everyone has moved away from using it and keeping it has caused confusion
@@ -95,7 +103,7 @@
   - `regenerate`
     - `type` is no longer required
 
-## 1.2.0 / 2019-08-16
+## 1.3.0 / 2019-08-16
 
 - Added more Client commands to assist in maintaining Client credentials:
   - `remove` - Removes Client credentials from Akkeris Config only
