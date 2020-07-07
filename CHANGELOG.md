@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.0.0 / 2020-07-07
 
 ### Breaking Changes
 
@@ -13,7 +13,8 @@
   - If that doesn't work, you may have to just switch the git branch:
     ```zsh
     cd ~/.akkeris/plugins/coreauth && \
-    git checkout master
+    git checkout master && \
+    aka update
     ```
 **- Removed `-s --space` option**
   - Everyone has moved away from using it and keeping it has caused confusion
