@@ -1,43 +1,35 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 const { removeConfig } = require('./remove')
 
-function deactivateClient (appkit, args) {
-  const clientTask = appkit.terminal.task(
-    `Deactivating Core Auth OAuth Client Credentials for ${args.app}-${args.space}`
+function deactivateClient (akkeris, args) {
+  const task = akkeris.terminal.task(
+    `Deactivating OAuth Client for ${args.app}`
   )
-  clientTask.start()
+  task.start()
 
-  let app = args.app.toLowerCase()
-  const space = args.space && args.space.toLowerCase()
+  const app = args.app.toLowerCase()
   const environment = args.environment.toLowerCase()
 
-  /** Backwards compatability */
-  if (space) app = app.includes(space) ? app : app + space
-
-  const authAxios = buildAxiosWithEnvAndAuth(appkit, environment)
+  const authAxios = buildAxiosWithEnvAndAuth(akkeris, environment)
   return authAxios.post('/coreauth/client/deactivate', { app })
-    .then(() => clientTask.end('ok'))
+    .then(() => task.end('ok'))
     .then(() => {
-      const configTask = appkit.terminal.task(
-        `Removing Core Auth Client Credentials Config for ${args.app}-${args.space}`
+      const configTask = akkeris.terminal.task(
+        `Removing OAuth Client config from ${args.app}`
       )
       configTask.start()
-      return removeConfig(appkit, app)
+      return removeConfig(akkeris, app)
         .then(() => configTask.end('ok'))
         .catch(err => {
-          configTask.end('error')
-          appkit.terminal.print(
-            err.response && err.response.data.error ? err.response.data.error : err,
-            'An error occured while attempting to remove the Client Credentials Config from Akkeris\n'
-          )
+          task.end('error')
+          akkeris.terminal.error('An error occured while attempting to remove the config from Akkeris')
+          akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
         })
     })
     .catch(err => {
-      clientTask.end('error')
-      appkit.terminal.print(
-        err.response && err.response.data.error ? err.response.data.error : err,
-        'An error occured while attempting to deactivate your Core Auth OAuth Client\n'
-      )
+      task.end('error')
+      akkeris.terminal.error('An error occured while attempting to deactivate your OAuth Client')
+      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
     })
 }
 
