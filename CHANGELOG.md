@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.2 / 2020-07-08
+
+### Internal
+
+- removed `type: module` from package.json which threw for NodeJS versions >=v14
+- Reverted `primary: false` to `true` for the plugin
+
 ## 3.0.1 / 2020-07-07
 
 ### Internal/Docs
