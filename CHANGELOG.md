@@ -1,20 +1,29 @@
 # Changelog
 
-## 3.0.2 / 2020-07-08
+## [v3.0.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2020-08-03
+
+### Internal
+
+- Added `update.js` to handle the npm install after updating
+- Updated help text
+- Updated readme
+- Updated ramda library
+
+## [v3.0.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.2) / 2020-07-08
 
 ### Internal
 
 - removed `type: module` from package.json which threw for NodeJS versions >=v14
 - Reverted `primary: false` to `true` for the plugin
 
-## 3.0.1 / 2020-07-07
+## [v3.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.1) / 2020-07-07
 
 ### Internal/Docs
 
 - Added `install.js` per Akkeris team instructions
 - Fixed changelog version number `v1.2.0` -> `v1.3.0`
 
-## 3.0.0 / 2020-07-07
+## [v3.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.0) / 2020-07-07
 
 ### Breaking Changes
 
@@ -78,12 +87,12 @@
     - Updated packages
     - Removed license
 
-## 2.0.1 / 2020-06-03
+## [v2.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v2.0.1) / 2020-06-03
 
 - Updated package dependencies to latest
 - Moved development linter from `prettier-standard` -> `standardJS`
 
-## 2.0.0 / 2019-12-05
+## [v2.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v2.0.0) / 2019-12-05
 
 - Added Deactivate Client command for deactivating a client and removing it from Akkeris
   - `deactivate`
@@ -101,7 +110,7 @@
 - Update using the flag `--post_login_url` -> `--postLoginURL`
 - Update using the flag `--post_logout_url` -> `--postLogoutURL`
 
-## 1.3.1 / 2019-09-03
+## [v1.3.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.3.1) / 2019-09-03
 
 - Updated Create command API route and new command routes
 - Updated commands
@@ -110,46 +119,46 @@
   - `regenerate`
     - `type` is no longer required
 
-## 1.3.0 / 2019-08-16
+## [v1.3.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.3.0) / 2019-08-16
 
 - Added more Client commands to assist in maintaining Client credentials:
   - `remove` - Removes Client credentials from Akkeris Config only
   - `update` - Updates the Core Auth Client and Akkeris Config
   - `regenerate` - Regenerates the Apps Client Secret and updates Akkeris Config
 
-## 1.1.3 / 2019-08-05
+## [v1.1.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.3) / 2019-08-05
 
 - Use symbolic link for `index.js` -> `dist/index.js`
 - Update Scripts, removed `preversion`
 - Update error handling
 
-## 1.1.2 / 2019-08-05
+## [v1.1.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.2) / 2019-08-05
 
 - Using `ncc` for single file build
 
-## 1.1.1 / 2019-07-30
+## [v1.1.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.1) / 2019-07-30
 
 - Updated Readme Examples
 - Updated plugin help
 
-## 1.1.0 / 2019-07-30
+## [v1.1.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.0) / 2019-07-30
 
 - Changed `redirect_uris` -> `post_login_url`
 - Changed `returnto_uris` -> `post_logout_url`
   - *url* instead of *uris* because it should be a valid *url* and using the flag multiple times puts it into an array
 - Updated readme to reflect changes in examples
 
-## 1.0.2 / 2019-07-29
+## [v1.0.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.2) / 2019-07-29
 
 - Updated plugin name/group `core` -> `coreauth`
 
-## 1.0.1 / 2019-07-29
+## [v1.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.1) / 2019-07-29
 
 - Updated messaging to be a task
 - Updated help text
 - Renamed `credentials.js` -> `client.js`
 
-## 1.0.0 / 2019-07-29
+## [v1.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.0) / 2019-07-29
 
 - New plugin using latest Core Auth OAuth Client API
 - Improved error handling

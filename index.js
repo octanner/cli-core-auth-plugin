@@ -12,6 +12,6 @@ module.exports = {
   },
   update: () => {},
   group: 'coreauth',
-  help: 'Manage OAuth Clients & Scope using Core Auth (Create, Deactivate, Add, Remove)',
+  help: 'Manage OAuth Clients using Core Auth',
   primary: true
 }
