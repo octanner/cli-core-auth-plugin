@@ -2,7 +2,7 @@
   "name": "cli-core-auth-akkeris-plugin",
   "description": "Akkeris CLI plugin for Apps to create and manage their OAuth Client with Core Auth",
   "private": true,
-  "version": "3.0.3",
+  "version": "3.0.4",
   "author": "Jan Taylor <jan.taylor@octanner.com>",
   "maintainers": [
     "Tyler Evans <tyler.evans-ct@octanner.com>"
@@ -20,10 +20,10 @@
     "lint": "standard --fix 'plugin.js' 'commands/**/*.js' 'utils/*.js'"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
-    "standard": "^14.3.4"
+    "standard": "^16.0.3"
   }
 }
