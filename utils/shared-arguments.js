@@ -29,29 +29,40 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'scope - that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
+        'scope - scope that should be added added or removed from the OAuth Client (Can be passed multiple times)'
   },
+
+  // customerId: {
+  //   alias: 'c',
+  //   string: true,
+  //   demand: false,
+  //   description:
+  //     'customer_id - The customer ID/UUID that this OAuth Client will be scoped to and associated with'
+  // },
 
   featureCode: {
     alias: 'f',
     string: true,
     demand: false,
     description:
-        'feature_code - The feature code is used to search and returns scope(s) belonging to it'
+        'feature_code - the feature code that is associated with this OAuth Client and for filtering scope(s) belonging to it'
   },
 
   type: {
     alias: 't',
     string: true,
     demand: true,
+    choices: ['WEB', 'MOBILE', 'API'],
+    // choices: ['WEB', 'MOBILE', 'SPA', 'API', 'EXTERNAL_API', 'INTROSPECTION_API'],
     description:
-        'type - Choose one: [WEB|MOBILE|API|INTROSPECTION]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+        'type - Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
   },
 
   environment: {
     alias: 'e',
     string: true,
     demand: true,
+    choices: ['LOCAL', 'local', 'QA', 'qa', 'STG', 'stg', 'PRD', 'prd'],
     description:
         'environment - Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
   }

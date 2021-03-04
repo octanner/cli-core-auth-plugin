@@ -1,5 +1,32 @@
 # Changelog
 
+## [v4.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v4.0.0) / 2021-02-12
+
+### Breaking Changes
+
+- Removed the following deprecated config from being added/updated/removed:
+  - `CORE_AUTH_CLIENT_ID`, please use `CORE_CLIENT_ID` instead
+  - `CORE_AUTH_CLIENT_SECRET`, please use `CORE_CLIENT_SECRET` instead
+  - `CORE_AUTH_POST_LOGIN_URIS`, please use `CORE_CLIENT_LOGIN_REDIRECT_URI` instead
+  - `CORE_AUTH_POST_LOGOUT_URIS`, please use `CORE_CLIENT_LOGOUT_REDIRECT_URI` instead
+- Added Core Auth Internal URLS to be either created or updated (if it already exists):
+  - `CORE_AUTHORIZATION_URL`
+  - `CORE_TOKEN_URL`
+  - `CORE_INTROSPECTION_URL`
+  - `CORE_REVOCATION_URL`
+  - `CORE_JWKS_URL`
+
+### Features
+
+- Call Core-SSO directly instead of Akkeris-Credential-Injector
+
+### Internal
+
+- Cleaned up the arguments help
+- Updated readme
+- Updated ramda library
+- updated axios from vulnerability
+
 ## [v3.0.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2020-08-03
 
 ### Internal
@@ -18,7 +45,7 @@
 
 ## [v3.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.1) / 2020-07-07
 
-### Internal/Docs
+### Interna
 
 - Added `install.js` per Akkeris team instructions
 - Fixed changelog version number `v1.2.0` -> `v1.3.0`
@@ -76,7 +103,7 @@
 - Added `coreauth:version` command for easier debugging
 - Added warning **NOTE** message to let users know they may be regenerating their client_secret if it's missing from the config
 
-### Internal/Docs
+### Internal
   
   - Updated help messages removing 'Core Auth' and using 'OAuth Client' instead
     - Core Auth may be more than just OAuth--this should help with future ambiguity

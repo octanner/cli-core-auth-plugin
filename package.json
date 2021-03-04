@@ -13,17 +13,17 @@
     "url": "https://github.com/octanner/cli-core-auth-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/octanner/cli-core-auth-plugin/issues"
+    "url": "https://jira.octanner.com/secure/CreateIssue.jspa?issuetype=1&pid=13413"
   },
   "main": "index.js",
   "scripts": {
     "lint": "standard --fix 'plugin.js' 'commands/**/*.js' 'utils/*.js'"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
-    "standard": "^14.3.4"
+    "standard": "^16.0.3"
   }
 }

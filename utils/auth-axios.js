@@ -2,11 +2,9 @@ const axios = require('axios').default
 const environments = require('./environments')
 
 const verifyEnv = function (environment) {
-  if (!environment) throw new Error('The Environment was not passed')
-
-  var env = environments[environment.toLowerCase()]
-  if (!env) throw new Error(`The Environment passed: ${environment} does not exist`)
-
+  if (!environment) throw new ReferenceError('Missing Param: \'environment\'')
+  const env = environments[environment.toLowerCase()]
+  if (!env) throw new ReferenceError(`The Environment passed: ${environment} does not exist`)
   return env
 }
 
