@@ -1,6 +1,6 @@
 # Changelog
 
-## [v4.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v4.0.0) / 2021-02-12
+## [v4.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v4.0.0) / 2021-11-16
 
 ### Breaking Changes
 
@@ -25,7 +25,12 @@
 - Cleaned up the arguments help
 - Updated readme
 - Updated ramda library
-- updated axios from vulnerability
+
+## [v3.0.4](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2021-03-04
+
+### Internal
+
+- Updated Axios
 
 ## [v3.0.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2020-08-03
 
