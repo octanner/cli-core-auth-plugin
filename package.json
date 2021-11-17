@@ -20,10 +20,10 @@
     "lint": "standard --fix 'plugin.js' 'commands/**/*.js' 'utils/*.js'"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
-    "standard": "^16.0.3"
+    "standard": "^16.0.4"
   }
 }
