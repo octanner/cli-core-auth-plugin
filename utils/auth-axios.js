@@ -10,7 +10,7 @@ const verifyEnv = function (environment) {
 
 const createAxiosWithAuth = (env, account) => axios.create({
   baseURL: env.url,
-  timeout: 5000,
+  timeout: 4000, // 4 seconds
   headers: {
     Authorization: `Bearer ${account.password}`,
     'x-username': `${account.password}`

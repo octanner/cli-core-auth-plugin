@@ -9,12 +9,14 @@
   - `CORE_AUTH_CLIENT_SECRET`, please use `CORE_CLIENT_SECRET` instead
   - `CORE_AUTH_POST_LOGIN_URIS`, please use `CORE_CLIENT_LOGIN_REDIRECT_URI` instead
   - `CORE_AUTH_POST_LOGOUT_URIS`, please use `CORE_CLIENT_LOGOUT_REDIRECT_URI` instead
-- Added Core Auth Internal URLS to be either created or updated (if it already exists):
+- Added additional Core Auth Internal URLS to be either created or updated (if it already exists):
   - `CORE_AUTHORIZATION_URL`
   - `CORE_TOKEN_URL`
   - `CORE_INTROSPECTION_URL`
   - `CORE_REVOCATION_URL`
   - `CORE_JWKS_URL`
+- Removed the following commands:
+  - `regenerate`, used to regenerate an OAuth Client secret, please use `regenerate-secret` instead
 
 ### Features
 
@@ -23,8 +25,10 @@
 ### Internal
 
 - Cleaned up the arguments help
-- Updated readme
-- Updated ramda library
+- Updated `README`
+- Updated `ramda` library
+- Updated `axios` library
+- Changed axios internal timeout to 4 seconds, from 5 seconds
 
 ## [v3.0.4](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2021-03-04
 

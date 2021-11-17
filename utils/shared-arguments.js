@@ -2,10 +2,10 @@
 
 module.exports = {
   app: {
-    alias: 'a',
+    alias: 'n',
     string: true,
-    demand: true,
-    description: 'app - An existing akkeris app that can securely store the OAuth Client credentials'
+    demand: false,
+    description: 'app - the akkeris app (i.e. "webapp-core-stg") or name/description of the OAuth Client. (i.e. "PA Print Manager - Team XYZ")'
   },
 
   postLoginURL: {
@@ -13,7 +13,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'redirect_uri - endpoint that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
+        'redirect_uri - an existing endpoint that your app will be listening on for "code" & "state" once a user authenticates (can be passed multiple times for multiple URIs)'
   },
 
   postLogoutURL: {
@@ -21,7 +21,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'returnto_uri - endpoint that your app will be listening on for a user to return to after logging out to log back in (Can be passed multiple times)'
+        'returnto_uri - an existing endpoint that your app will be listening on to start SP-Initaited SSO after a user logs out and they click "Log Back In" (can be passed multiple times for multiple URIs)'
   },
 
   scope: {
@@ -32,13 +32,13 @@ module.exports = {
         'scope - scope that should be added added or removed from the OAuth Client (Can be passed multiple times)'
   },
 
-  // customerId: {
-  //   alias: 'c',
-  //   string: true,
-  //   demand: false,
-  //   description:
-  //     'customer_id - The customer ID/UUID that this OAuth Client will be scoped to and associated with'
-  // },
+  customerId: {
+    alias: 'c',
+    string: true,
+    demand: false,
+    description:
+      'customer_id - The customer ID/UUID that this OAuth Client will be scoped to and associated with'
+  },
 
   featureCode: {
     alias: 'f',
@@ -51,11 +51,10 @@ module.exports = {
   type: {
     alias: 't',
     string: true,
-    demand: true,
-    choices: ['WEB', 'MOBILE', 'API'],
-    // choices: ['WEB', 'MOBILE', 'SPA', 'API', 'EXTERNAL_API', 'INTROSPECTION_API'],
+    demand: false,
+    choices: ['WEB', 'MOBILE', 'API', 'EXTERNAL_API'],
     description:
-        'type - Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+        'type - Choose one: [WEB|MOBILE|API|EXTERNAL_API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
   },
 
   environment: {
@@ -64,6 +63,6 @@ module.exports = {
     demand: true,
     choices: ['LOCAL', 'local', 'QA', 'qa', 'STG', 'stg', 'PRD', 'prd'],
     description:
-        'environment - Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
+        'environment - Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA would be the Core Team only)'
   }
 }

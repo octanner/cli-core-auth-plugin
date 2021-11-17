@@ -28,15 +28,6 @@ module.exports = {
         deactivate.bind(null, akkeris)
       )
       .command(
-        'coreauth:client:regenerate',
-        'Deprecated: See \'coreauth:client:regenerate-secret\'',
-        {
-          app: sharedArgs.app,
-          environment: sharedArgs.environment
-        },
-        regenerate.bind(null, akkeris)
-      )
-      .command(
         'coreauth:client:regenerate-secret',
         'Regenerate the OAuth Client\'s \'client_secret\' and update the config for the specified app',
         {
@@ -47,7 +38,7 @@ module.exports = {
       )
       .command(
         'coreauth:client:remove',
-        'Remove the OAuth Client configuration variables from the specified app (Does not deactivate OAuth Client)',
+        'Remove the OAuth Client configuration variables from the specified app (does not deactivate the OAuth Client)',
         {
           app: sharedArgs.app
         },
@@ -61,7 +52,7 @@ module.exports = {
       )
       .command(
         'coreauth:client:add-scope',
-        'Add Scope(s) to your OAuth Client',
+        'Add scope(s) to your OAuth Client',
         {
           app: sharedArgs.app,
           scope: sharedArgs.scope,
@@ -71,7 +62,7 @@ module.exports = {
       )
       .command(
         'coreauth:client:remove-scope',
-        'Remove Scope(s) from your OAuth Client',
+        'Remove scope(s) from your OAuth Client',
         {
           app: sharedArgs.app,
           scope: sharedArgs.scope,
