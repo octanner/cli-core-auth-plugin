@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.0.5](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.4) / 2020-03-04
+## [v3.0.5](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.4) / 2021-11-17
 
 ### Internal
 
