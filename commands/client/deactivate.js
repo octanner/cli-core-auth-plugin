@@ -22,14 +22,12 @@ function deactivateClient (akkeris, args) {
         .then(() => configTask.end('ok'))
         .catch(err => {
           task.end('error')
-          akkeris.terminal.error('An error occured while attempting to remove the config from Akkeris')
-          akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
+          akkeris.terminal.error('An error occured while attempting to remove the config from Akkeris', err)
         })
     })
     .catch(err => {
       task.end('error')
-      akkeris.terminal.error('An error occured while attempting to deactivate your OAuth Client')
-      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
+      akkeris.terminal.error('An error occured while attempting to deactivate your OAuth Client', err)
     })
 }
 
