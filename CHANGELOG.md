@@ -1,5 +1,23 @@
 # Changelog
 
+## [v3.1.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.1.0) / 2022-01-26
+
+### New Features
+
+- Improved the responses of the following commands:
+  - `coreauth:client:add-scopes` - now displays a table of `scope_name` and a `status` value of `ADDED` if the scope was just added to easily identify changes
+  - `coreauth:client:add-scopes` - now displays a table of `scope_name` to review the currently assigned scopes
+
+### Bug Fixes
+
+- Resovled the `Cannot read 'status' of undefined error`
+
+### Internal
+
+- Reworded the Note/Warning on the `coreauth:create` command
+- Updated packages to remove security vulnerabilities
+- Increased `akkeris-credential-injector` timeout from 5s -> 10s
+
 ## [v3.0.5](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.4) / 2021-11-17
 
 ### Internal

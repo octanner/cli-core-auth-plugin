@@ -2,7 +2,7 @@
 
 function filterConfig (config) {
   return Object.keys(config)
-    .filter((key) => key.startsWith('CORE_AUTH_'))
+    .filter((key) => key.startsWith('CORE_AUTH_') || key.startsWith('CORE_CLIENT_'))
     .reduce((res, key) => ((res[key] = null), res), {}) // eslint-disable-line no-sequences
 }
 
@@ -32,8 +32,7 @@ function removeClient (akkeris, args) {
     .then(() => task.end('ok'))
     .catch(err => {
       task.end('error')
-      akkeris.terminal.error('An error occured while attempting to remove your Core Auth Configuration from Akkeris')
-      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
+      akkeris.terminal.error('An error occured while attempting to remove your Core Auth Configuration from Akkeris', err)
     })
 }
 

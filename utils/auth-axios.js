@@ -4,7 +4,7 @@ const environments = require('./environments')
 const verifyEnv = function (environment) {
   if (!environment) throw new Error('The Environment was not passed')
 
-  var env = environments[environment.toLowerCase()]
+  const env = environments[environment.toLowerCase()]
   if (!env) throw new Error(`The Environment passed: ${environment} does not exist`)
 
   return env
@@ -12,7 +12,7 @@ const verifyEnv = function (environment) {
 
 const createAxiosWithAuth = (env, account) => axios.create({
   baseURL: env.url,
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     Authorization: `Bearer ${account.password}`,
     'x-username': `${account.password}`

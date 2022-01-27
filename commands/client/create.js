@@ -1,35 +1,28 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 function createClient (akkeris, args) {
-  akkeris.terminal.print('Note: If your app is missing the client_secret configuration, this command will regenerate the client_secret and update the configuration in Akkeris.')
-  const task = akkeris.terminal.task(`Creating OAuth Client for ${args.app}`)
-  task.start()
+  akkeris.terminal.print('* Note: If your app exists in the selected environment, but is missing the CLIENT_SECRET config, this command will regenerate the CLIENT_SECRET and update the config! *')
+  const task = akkeris.terminal.task(`Creating an OAuth Client for: ${args.app}`)
 
   const app = args.app.toLowerCase()
   const type = args.type.toUpperCase()
   const environment = args.environment.toLowerCase()
   const authAxios = buildAxiosWithEnvAndAuth(akkeris, environment)
 
+  task.start()
   return authAxios.post('/coreauth/client/create', {
     app: app,
     redirect_uris: args.postLoginURL,
     returnto_uris: args.postLogoutURL,
     type: type
   })
-    .then((config) => {
-      akkeris.terminal.format_objects((err, config) => {
-        if (err) {
-          akkeris.terminal.error(err)
-          return task.end('error')
-        }
-        return config
-      })
-      return task.end('ok')
+    .then(response => {
+      task.end('ok')
+      akkeris.terminal.vtable(response.data)
     })
     .catch(err => {
       task.end('error')
-      akkeris.terminal.error('An error occured while attempting to create an OAuth Client')
-      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
+      akkeris.terminal.error('An error occured while attempting to create an OAuth Client', err)
     })
 }
 

@@ -20,8 +20,7 @@ async function updateClient (akkeris, args) {
     .then(() => task.end('ok'))
     .catch(err => {
       task.end('error')
-      akkeris.terminal.error('An error occured while attempting to update your OAuth Client')
-      akkeris.terminal.error(`${err.response.status} - ${err.response.data.name}: ${err.response.data.message}`)
+      akkeris.terminal.error('An error occured while attempting to update your OAuth Client', err)
     })
 }
 
