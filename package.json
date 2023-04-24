@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "axios": "^0.25.0",
-    "ramda": "^0.28.0"
+    "ramda": "^0.29.0"
   },
   "devDependencies": {
     "standard": "^16.0.4"
