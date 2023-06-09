@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.2.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.0) / 2023-06-09
+
+### Internal
+
+- Updated the `coreauth:version` command to output the version
+- Changed the `coreauth:client:create` command to output the `* Note *` as a `soft_error` for more visibility
+
+
 ## [v3.2.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.0) / 2023-06-09
 
 ### Internal

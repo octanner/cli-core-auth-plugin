@@ -1,7 +1,7 @@
 const buildAxiosWithEnvAndAuth = require('../../utils/auth-axios')
 
 function createClient (akkeris, args) {
-  akkeris.terminal.print('* Note: If your app exists in the selected environment, but is missing the CLIENT_SECRET config, this command will regenerate the CLIENT_SECRET and update the config! *')
+  akkeris.terminal.soft_error('* Note: If your app exists in the selected environment, but is missing the CLIENT_SECRET config, this command will regenerate the CLIENT_SECRET and update the config! *')
   const task = akkeris.terminal.task(`Creating an OAuth Client for: ${args.app}`)
 
   const app = args.app.toLowerCase()
@@ -11,10 +11,10 @@ function createClient (akkeris, args) {
 
   task.start()
   return authAxios.post('/coreauth/client/create', {
-    app: app,
+    app,
     redirect_uris: args.postLoginURL,
     returnto_uris: args.postLogoutURL,
-    type: type
+    type
   })
     .then(response => {
       task.end('ok')
