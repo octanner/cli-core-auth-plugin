@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.2.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.0) / 2023-06-09
+
+### New Features
+
+- Added support for the `gamma` environment. Use `-e gam`.
+  - **Note: You must be on the OCT network or connected via the VPN**
+
+
 ## [v3.1.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.1.0) / 2022-01-26
 
 ### New Features
