@@ -1,17 +1,20 @@
 'use strict'
 
-const { version } = require('../package.json')
+const { version: packageVersion } = require('../package.json')
 
 const noop = () => {}
+const version = (_akkeris) => {
+  console.log(`v${packageVersion}`)
+}
 
 module.exports = {
   init: akkeris => {
     akkeris.args
       .command(
         'coreauth:version',
-        `cli-core-auth-plugin v${version}`,
+        `cli-core-auth-plugin v${packageVersion}`,
         {},
-        noop.bind(null, akkeris)
+        version.bind(null, akkeris)
       )
   },
   update: noop,

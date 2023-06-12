@@ -1,5 +1,36 @@
 # Changelog
 
+## [v3.2.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.3) / 2023-06-09
+
+### Internal
+
+- Fixed the `v3.2.X` links to the proper release page
+
+
+## [v3.2.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.2) / 2023-06-09
+
+### Internal
+
+- Updated the `coreauth:version` command to output the version
+- Changed the `coreauth:client:create` command to output the `* Note *` as a `soft_error` for more visibility
+
+
+## [v3.2.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.1) / 2023-06-09
+
+### Internal
+
+- Updated packages to remove security vulnerabilities
+- Formatted previous changes for consistency
+
+
+## [v3.2.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.0) / 2023-06-09
+
+### New Features
+
+- Added support for the `gamma` environment. Use `-e gam`.
+  - **Note: You must be on the OCT network or connected via the VPN**
+
+
 ## [v3.1.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.1.0) / 2022-01-26
 
 ### New Features
@@ -24,10 +55,13 @@
 
 - Updated packages to remove security vulnerabilities
 
+
 ## [v3.0.4](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.4) / 2020-03-04
 ### Internal
 
 - Updated `axios`
+
+
 ## [v3.0.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.3) / 2020-08-03
 
 ### Internal
@@ -37,6 +71,7 @@
 - Updated readme
 - Updated ramda library
 
+
 ## [v3.0.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.2) / 2020-07-08
 
 ### Internal
@@ -44,12 +79,14 @@
 - removed `type: module` from package.json which threw for NodeJS versions >=v14
 - Reverted `primary: false` to `true` for the plugin
 
+
 ## [v3.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.1) / 2020-07-07
 
 ### Internal/Docs
 
 - Added `install.js` per Akkeris team instructions
 - Fixed changelog version number `v1.2.0` -> `v1.3.0`
+
 
 ## [v3.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.0.0) / 2020-07-07
 
@@ -115,10 +152,12 @@
     - Updated packages
     - Removed license
 
+
 ## [v2.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v2.0.1) / 2020-06-03
 
 - Updated package dependencies to latest
 - Moved development linter from `prettier-standard` -> `standardJS`
+
 
 ## [v2.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v2.0.0) / 2019-12-05
 
@@ -138,6 +177,7 @@
 - Update using the flag `--post_login_url` -> `--postLoginURL`
 - Update using the flag `--post_logout_url` -> `--postLogoutURL`
 
+
 ## [v1.3.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.3.1) / 2019-09-03
 
 - Updated Create command API route and new command routes
@@ -147,6 +187,7 @@
   - `regenerate`
     - `type` is no longer required
 
+
 ## [v1.3.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.3.0) / 2019-08-16
 
 - Added more Client commands to assist in maintaining Client credentials:
@@ -154,20 +195,24 @@
   - `update` - Updates the Core Auth Client and Akkeris Config
   - `regenerate` - Regenerates the Apps Client Secret and updates Akkeris Config
 
+
 ## [v1.1.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.3) / 2019-08-05
 
 - Use symbolic link for `index.js` -> `dist/index.js`
 - Update Scripts, removed `preversion`
 - Update error handling
 
+
 ## [v1.1.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.2) / 2019-08-05
 
 - Using `ncc` for single file build
+
 
 ## [v1.1.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.1) / 2019-07-30
 
 - Updated Readme Examples
 - Updated plugin help
+
 
 ## [v1.1.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.1.0) / 2019-07-30
 
@@ -176,15 +221,18 @@
   - *url* instead of *uris* because it should be a valid *url* and using the flag multiple times puts it into an array
 - Updated readme to reflect changes in examples
 
+
 ## [v1.0.2](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.2) / 2019-07-29
 
 - Updated plugin name/group `core` -> `coreauth`
+
 
 ## [v1.0.1](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.1) / 2019-07-29
 
 - Updated messaging to be a task
 - Updated help text
 - Renamed `credentials.js` -> `client.js`
+
 
 ## [v1.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v1.0.0) / 2019-07-29
 
