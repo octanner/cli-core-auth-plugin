@@ -1,5 +1,19 @@
 # Changelog
 
+## [v4.0.0](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v4.0.0) / 2023-06-15
+
+### Breaking Changes
+
+- Removed the deprecated `coreauth:client:regenerate` command. Please use `coreauth:client:regenerate-secret` instead
+- Removed the option for `-s` `--scope` and `-f` `--feature` from the `coreauth:client:create` and `coreauth:client:update` commands as they were not adding the scopes to the OAuth Client.
+  - **Note: Please use the `coreauth:client:add-scope` command after you have created your client or have updated it**
+
+### Internal
+
+- Fixed the `-e` `--environment` option, to include the `GAM` (Gamma) environment as an option
+- Fixed the `-t` `--type` option, removing the unused `INTROSPECTION` type which has not been released
+
+
 ## [v3.2.3](https://github.com/octanner/cli-core-auth-plugin/releases/tag/v3.2.3) / 2023-06-09
 
 ### Internal
