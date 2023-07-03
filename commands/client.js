@@ -15,7 +15,13 @@ module.exports = {
       .command(
         'coreauth:client:create',
         'Create OAuth2 Client credentials and assign them to the specified app',
-        sharedArgs,
+        {
+          app: sharedArgs.app,
+          postLoginURL: sharedArgs.postLoginURL,
+          postLogoutURL: sharedArgs.postLogoutURL,
+          type: sharedArgs.type,
+          environment: sharedArgs.environment
+        },
         create.bind(null, akkeris)
       )
       .command(
@@ -26,15 +32,6 @@ module.exports = {
           environment: sharedArgs.environment
         },
         deactivate.bind(null, akkeris)
-      )
-      .command(
-        'coreauth:client:regenerate',
-        'Deprecated: See \'coreauth:client:regenerate-secret\'',
-        {
-          app: sharedArgs.app,
-          environment: sharedArgs.environment
-        },
-        regenerate.bind(null, akkeris)
       )
       .command(
         'coreauth:client:regenerate-secret',
@@ -56,7 +53,13 @@ module.exports = {
       .command(
         'coreauth:client:update',
         'Update the OAuth Client and add/update the config for the specified app',
-        sharedArgs,
+        {
+          app: sharedArgs.app,
+          postLoginURL: sharedArgs.postLoginURL,
+          postLogoutURL: sharedArgs.postLogoutURL,
+          type: sharedArgs.type,
+          environment: sharedArgs.environment
+        },
         update.bind(null, akkeris)
       )
       .command(

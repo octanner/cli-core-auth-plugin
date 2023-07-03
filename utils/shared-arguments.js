@@ -45,7 +45,7 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'type - Choose one: [WEB|MOBILE|API|INTROSPECTION]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+        'type - Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
   },
 
   environment: {
@@ -53,6 +53,6 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'environment - Choose one: [QA|STG|PRD]. Which Core environment will your app be connecting with? (Note: QA should be Core Team only)'
+        'environment - Choose one: [QA|STG|GAM|PRD]. Which Core environment will your app be connecting with?'
   }
 }
