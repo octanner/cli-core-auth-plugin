@@ -4,7 +4,7 @@
 
 ## Usage
 
-Maintains Core OAuth2 Clients for Web, Mobile, or APIs hosted on Akkeris
+Maintains Core OAuth2 Clients for Web, Mobile, SPA, INTEGRATION, or APIs hosted on Akkeris
 
 ```zsh
 coreauth
