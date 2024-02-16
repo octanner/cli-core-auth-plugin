@@ -13,7 +13,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'redirect_uri - endpoint that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
+      'redirect_uri - endpoint that your app will be listening on for an "authorization_code" once a user authenticates (Can be passed multiple times)'
   },
 
   postLogoutURL: {
@@ -21,7 +21,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'returnto_uri - endpoint that your app will be listening on for a user to return to after logging out to log back in (Can be passed multiple times)'
+      'returnto_uri - endpoint that your app will be listening on for a user to return to after logging out to log back in (Can be passed multiple times)'
   },
 
   scope: {
@@ -29,7 +29,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'scope - that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
+      'scope - that will be searched for or added/removed from OAuth Clients (Can be passed multiple times)'
   },
 
   featureCode: {
@@ -37,7 +37,7 @@ module.exports = {
     string: true,
     demand: false,
     description:
-        'feature_code - The feature code is used to search and returns scope(s) belonging to it'
+      'feature_code - The feature code is used to search and returns scope(s) belonging to it'
   },
 
   type: {
@@ -45,7 +45,7 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'type - Choose one: [WEB|MOBILE|API]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
+      'type - Choose one: [WEB|MOBILE|API|SPA|INTEGRATION]. The type of OAuth Client your app needs will restrict it from authorizing on behalf of users or itself'
   },
 
   environment: {
@@ -53,6 +53,6 @@ module.exports = {
     string: true,
     demand: true,
     description:
-        'environment - Choose one: [QA|STG|GAM|PRD]. Which Core environment will your app be connecting with?'
+      'environment - Choose one: [QA|STG|GAM|PRD]. Which Core environment will your app be connecting with?'
   }
 }
